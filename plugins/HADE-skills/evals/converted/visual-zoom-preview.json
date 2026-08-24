@@ -1,0 +1,6 @@
+[
+  { "query": "做一个 A4 文档预览组件，要能缩放，还要支持单页和双页切换", "should_trigger": true },
+  { "query": "双页模式看着比单页松太多了，怎么回事", "should_trigger": true },
+  { "query": "放大之后顶部内容跑到窗口外面看不见了", "should_trigger": true },
+  { "query": "给这张图片加个点击放大的灯箱效果", "should_trigger": false }
+]
