@@ -1,0 +1,8 @@
+{
+  "name": "HADE-core",
+  "displayName": "HADE 人格层",
+  "description": "HADE 本体唤醒层。SessionStart 时注入指针，把实例化从『description 概率匹配』变成『hook 确定触发 + 一次确定的 Read』。",
+  "version": "0.1.0",
+  "author": { "name": "Kevin" },
+  "defaultEnabled": true
+}

@@ -1,0 +1,10 @@
+{
+  "skill_name": "visual-zoom-preview",
+  "note": "前 3 条应触发，第 4 条为负例",
+  "evals": [
+    { "id": 1, "prompt": "做一个 A4 文档预览组件，要能缩放，还要支持单页和双页切换", "expected_output": "读 visual-zoom-preview；应用呼吸比例锚点=内容宽×zoom、单双页规则对称参数化、焦点 top center", "files": [] },
+    { "id": 2, "prompt": "双页模式看着比单页松太多了，怎么回事", "expected_output": "读 visual-zoom-preview；直接命中反例——双页 max 用 availW×0.95/1022 导致呼吸/字号比 6.3% vs 单页 2.63%", "files": [] },
+    { "id": 3, "prompt": "放大之后顶部内容跑到窗口外面看不见了", "expected_output": "读 visual-zoom-preview；命中「焦点锚点 = top center 不是 center center」，align-items: center 是根因", "files": [] },
+    { "id": 4, "prompt": "给这张图片加个点击放大的灯箱效果", "expected_output": "不应触发 —— 图片灯箱不涉及呼吸比例/单双页/滚动条居中这套画布缩放布局问题", "files": [] }
+  ]
+}

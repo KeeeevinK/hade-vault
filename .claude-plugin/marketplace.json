@@ -1,0 +1,16 @@
+{
+  "name": "hade-vault",
+  "owner": { "name": "Kevin" },
+  "plugins": [
+    {
+      "name": "HADE-core",
+      "source": "./plugins/HADE-core",
+      "description": "HADE 人格层 —— SessionStart 唤醒指针 + 本体安装件。只给自己装，不分发。"
+    },
+    {
+      "name": "HADE-skills",
+      "source": "./plugins/HADE-skills",
+      "description": "HADE 能力层 —— 按需加载的领域 skill 集合。可独立分发。"
+    }
+  ]
+}
