@@ -1,6 +1,8 @@
 {
   "name": "hade-vault",
-  "owner": { "name": "Kevin" },
+  "owner": {
+    "name": "Kevin"
+  },
   "plugins": [
     {
       "name": "HADE-core",
@@ -12,5 +14,6 @@
       "source": "./plugins/HADE-skills",
       "description": "HADE 能力层 —— 按需加载的领域 skill 集合。可独立分发。"
     }
-  ]
+  ],
+  "description": "HADE 双件套 —— 人格层（HADE-core）与能力层（HADE-skills）。"
 }
