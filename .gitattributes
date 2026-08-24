@@ -1,0 +1,4 @@
+# 归档保真：禁止任何行尾转换。
+# archive/ 下快照的 SHA256 必须与 archive/SHA256SUMS.txt 逐字节匹配，
+# 若 git 在 checkout 时把 LF 转成 CRLF，还原出来的文件哈希将失配。
+* -text
