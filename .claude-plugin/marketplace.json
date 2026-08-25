@@ -5,15 +5,15 @@
   },
   "plugins": [
     {
-      "name": "HADE-core",
-      "source": "./plugins/HADE-core",
+      "name": "hade-core",
+      "source": "./plugins/hade-core",
       "description": "HADE 人格层 —— SessionStart 唤醒指针 + 本体安装件。只给自己装，不分发。"
     },
     {
-      "name": "HADE-skills",
-      "source": "./plugins/HADE-skills",
+      "name": "hade-skills",
+      "source": "./plugins/hade-skills",
       "description": "HADE 能力层 —— 按需加载的领域 skill 集合。可独立分发。"
     }
   ],
-  "description": "HADE 双件套 —— 人格层（HADE-core）与能力层（HADE-skills）。"
+  "description": "HADE 双件套 —— 人格层（hade-core）与能力层（hade-skills）。"
 }
