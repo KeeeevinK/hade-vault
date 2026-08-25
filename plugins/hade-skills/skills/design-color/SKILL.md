@@ -12,11 +12,16 @@ description: HADE 跨所有工具共享的色彩系统 —— 双通道模型（
 本 skill 附带确定性校验器，把 §十 里**可判定的数值约束**变成一条命令。
 不替代下面的规则，是它的第二层保险：哨兵防「没想起来」，脚本防「想起来了但漏了一项」。
 
+**脚本路径**：本 skill 载入时，最开头的 `Base directory for this skill:` 一行给出了绝对路径。
+脚本在它下面的 `scripts/check_colors.py`。**用那一行拼接，不要猜路径** —— 路径含版本号
+（…/hade-skills/<版本>/skills/design-color），每次版本更新都会变，猜必然落空。
+
 ```bash
-python scripts/check_colors.py "#ff3b30" "#34c759"          # 逐色查 §十.1 通道/禁区
-python scripts/check_colors.py --area large "#007aff"       # §十.8 面积约束
-python scripts/check_colors.py --palette "#a" "#b" "#c"     # §十.6 密度 + §十.7 并置
-python scripts/check_colors.py --pair "#8e8e93" "#34c759"   # §十.3 翻牌姊妹色
+BASE="<把上面 Base directory 那一行的路径填进来>"
+python "$BASE/scripts/check_colors.py" "#ff3b30" "#34c759"        # 逐色查 §十.1 通道/禁区
+python "$BASE/scripts/check_colors.py" --area large "#007aff"     # §十.8 面积约束
+python "$BASE/scripts/check_colors.py" --palette "#a" "#b" "#c"   # §十.6 密度 + §十.7 并置
+python "$BASE/scripts/check_colors.py" --pair "#8e8e93" "#34c759" # §十.3 翻牌姊妹色
 ```
 
 退出码 0 = 通过，1 = 有违规。
@@ -32,6 +37,11 @@ python scripts/check_colors.py --pair "#8e8e93" "#34c759"   # §十.3 翻牌姊�
 §十.9 的 OutingTool V2.0 反例（十二色全在 S≈54）是同一种失败。
 
 这类错误与触发率无关，触发得再准也挡不住 —— 只有确定性检查能。
+
+**脚本真的跑不了时**（权限被拦 / 无 python）：明确告诉用户"脚本未执行，以下是手算"，
+然后**逐色写出 H/S/L 三个数**再下判断，不得跳过过程直接给结论。
+公式：`L=(max+min)/2`，`S=delta/(1-|2L-1|)`（delta=(max-min)/255）。
+给替代色时同样要逐个算完再给 —— 上面那次翻车正是替代色没算。
 
 ### 已知冲突（待用户裁决，脚本未擅自放行）
 
