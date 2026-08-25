@@ -1,4 +1,6 @@
 *-workspace/
-evals/results/
+# evals/results/ —— 本轮实测证据，必须留在仓库，不忽略
 .DS_Store
 Thumbs.db
+__pycache__/
+*.pyc
