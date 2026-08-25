@@ -1,0 +1,18 @@
+[
+  {
+    "query": "给这个仪表盘的六个状态标签各配一个颜色",
+    "should_trigger": true
+  },
+  {
+    "query": "这一整列的背景我想用 #007aff，行不行？",
+    "should_trigger": true
+  },
+  {
+    "query": "帮我给这个新组件挑套配色，深色一点的",
+    "should_trigger": true
+  },
+  {
+    "query": "把这个按钮的 padding 从 8px 调到 12px",
+    "should_trigger": false
+  }
+]

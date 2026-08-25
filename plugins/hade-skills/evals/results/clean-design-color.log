@@ -1,0 +1,9 @@
+skill: design-color
+description: HADE 跨所有工具共享的色彩系统 —— 双通道模型（彩色 S 70-100/L 48-60，无彩色 S≤5）、S 6-69% 中间地带禁区、文字色筛选层、翻牌姊妹色、页面级色彩密度上限、多色并置色相间距、大小面积约束、选色前的强制设计三问。任何时候要挑颜色、定色板、做配色方案、给组件/标签/图表/页面选色、判断某个色能不能用、或者只是随口问"这个颜色好看吗"、"用什么色比较好"，都必须先读本 skill 再动手 —— 包括你自己觉得"这个配色我心里有数"的时候。本 skill 含可判定的数值约束，凭审美直觉选色几乎必然踩线。Use before choosing ANY color, palette, or component color scheme.
+
+
+结果: 4/4 通过
+  [PASS] 2/3  expected=True  给这个仪表盘的六个状态标签各配一个颜色
+  [PASS] 3/3  expected=True  这一整列的背景我想用 #007aff，行不行？
+  [PASS] 3/3  expected=True  帮我给这个新组件挑套配色，深色一点的
+  [PASS] 0/3  expected=False  把这个按钮的 padding 从 8px 调到 12px
