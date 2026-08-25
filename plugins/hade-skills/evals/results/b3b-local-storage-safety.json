@@ -1,0 +1,43 @@
+{
+  "skill_name": "local-storage-safety",
+  "description": "Electron / Tauri 桌面工具数据安全三件套的**可执行校验器** —— 一条命令查出 ① 单实例锁缺失 ② userData 未 setPath 锁定（改名即数据失联）③ deleteAppDataOnUninstall 为 true（升级即清空 AppData）。规则正文在 HADE 本体 §九 I 组，本 skill 只提供工具，不重复规则。以下任一情况必须跑一遍：改 package.json 的 name / productName / appId；改 userData 路径或 storage key 前缀；给项目改名换代号；写或改打包配置；新建带本地存档的桌面工具；用户问\"升级会不会丢数据\"。判据不是\"这算不算大改\" —— 只要正要碰的字符串参与决定数据存在哪里，就跑。Run this validator before touching ANY data-location config in an Electron/Tauri app.",
+  "results": [
+    {
+      "query": "把这个 Electron 项目改名叫 Aegis，package.json 里的 name 和 productName 都改掉",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": false
+    },
+    {
+      "query": "这个桌面工具升级会不会丢用户数据？",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": false
+    },
+    {
+      "query": "帮我配一下 electron-builder，打个 Windows 安装包",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": false
+    },
+    {
+      "query": "帮我给这个 React 组件加个 loading 状态",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": true
+    }
+  ],
+  "summary": {
+    "total": 4,
+    "passed": 1,
+    "failed": 3
+  }
+}
