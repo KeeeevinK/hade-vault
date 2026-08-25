@@ -1,0 +1,9 @@
+skill: project-init
+description: 新项目初始化协议 —— 检测到项目目录缺 CHECKLIST.md / SPEC.md / CLAUDE.md 时的完整建档流程，含三份文档的格式规则（SPEC 顶部节号索引、CHECKLIST 三区结构 [待处理/未来规划/归档]、项目 CLAUDE.md 模板），以及最关键的「触发调整」：产品分两阶段，早期 Demo 期发散优先**不写文档**，有雏形后文档才介入。开新项目、进新目录发现没有这三份文档、用户说"我要做个新东西"、或你冒出"先把文档搭起来"的念头时，都必须先读本 skill —— 尤其是最后这种，早写文档正是本 skill 要拦的典型错误。Use when starting a new project or when a project directory lacks CHECKLIST/SPEC/CLAUDE.md.
+
+
+结果: 2/4 通过
+  [FAIL] 0/3  expected=True  我想做个新工具，管我每天喝水的记录
+  [FAIL] 0/3  expected=True  这个目录是空的，我要从头开始一个项目
+  [PASS] 3/3  expected=True  新项目该怎么起步？先建什么文件
+  [PASS] 0/3  expected=False  帮我看看这个函数为什么返回 undefined

@@ -1,0 +1,43 @@
+{
+  "skill_name": "global-maintenance",
+  "description": "Global 自身的维护规程 —— 新增规则条目的四要素格式（触发/动作/原因/反例）、调用率分级、以及「Global 更新调和协议」：新增前三问（属哪条元规则/是否已有相同概念/能否顺便去重）、必带元规则标签、改动后跑调和扫描、累计 5 条触发结构审查、元规则变动时复查下辖条目。任何时候要往 ~/.claude/CLAUDE.md 增 / 改 / 删条目，或用户说\"把这条记进 Global\"、\"这个要写进规则\"、\"更新一下你的文档\"时，都必须先读本 skill 再动手。Use before adding, modifying, or deleting any entry in the HADE Global rules file.",
+  "results": [
+    {
+      "query": "这条经验挺重要的，记进 Global 吧",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": false
+    },
+    {
+      "query": "我觉得那条规则写得不对，改一下",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": false
+    },
+    {
+      "query": "把刚才那个教训加到你的规则文档里",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": false
+    },
+    {
+      "query": "帮我在 README 里加一段安装说明",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": true
+    }
+  ],
+  "summary": {
+    "total": 4,
+    "passed": 1,
+    "failed": 3
+  }
+}
