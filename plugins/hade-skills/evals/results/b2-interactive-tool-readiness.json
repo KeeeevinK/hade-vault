@@ -1,0 +1,43 @@
+{
+  "skill_name": "interactive-tool-readiness",
+  "description": "做\"给用户操作的交互工具\"之前的闭环 checklist —— 选色器、配置器、输入界面、标注工具、任何要用户动手选 / 填 / 调的东西，上线前必须三件套齐备：持久化、导出回传机制、HADE 能读回结果。准备做这类工具时必须先读本 skill；尤其当你想让用户\"先开始用着，边用边补功能\"时更要读 —— 那正是本 skill 要拦的反例。Use before building any interactive tool the user will operate by hand.",
+  "results": [
+    {
+      "query": "做一个小工具让我手动挑颜色，挑完我告诉你结果",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": false
+    },
+    {
+      "query": "我要一个配置界面，能让我调那些阈值参数",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": false
+    },
+    {
+      "query": "做个标注界面，我一条条把数据分类标上",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": false
+    },
+    {
+      "query": "做个页面把这些统计数据展示出来",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": true
+    }
+  ],
+  "summary": {
+    "total": 4,
+    "passed": 1,
+    "failed": 3
+  }
+}

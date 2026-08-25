@@ -1,0 +1,43 @@
+{
+  "skill_name": "live-session-file-safety",
+  "description": "用户正在浏览器或应用里实测某功能时，禁止改动对应源文件 —— 文件一动就触发 HMR / 刷新，用户攒了半天的内存状态全丢。当用户说\"我在测\"、\"我看看\"、\"正在试\"、\"页面开着呢\"，或你刚请用户去界面上操作、而此刻你打算编辑那个界面对应的文件时，必须先读本 skill。哪怕用户同时要求你改，也要先读。Use when about to edit files the user is actively testing in a live session.",
+  "results": [
+    {
+      "query": "我页面开着在试这个功能，你顺手把那个按钮的颜色改一下",
+      "should_trigger": true,
+      "trigger_rate": 0.3333333333333333,
+      "triggers": 1,
+      "runs": 3,
+      "pass": false
+    },
+    {
+      "query": "我正在浏览器里看这个状态，同时帮我在 handler 里加条日志",
+      "should_trigger": true,
+      "trigger_rate": 0.6666666666666666,
+      "triggers": 2,
+      "runs": 3,
+      "pass": true
+    },
+    {
+      "query": "别刷新，我在测拖拽，你把 App.jsx 那个 onDrop 改了",
+      "should_trigger": true,
+      "trigger_rate": 1.0,
+      "triggers": 3,
+      "runs": 3,
+      "pass": true
+    },
+    {
+      "query": "帮我把 README 里的错别字改一下",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": true
+    }
+  ],
+  "summary": {
+    "total": 4,
+    "passed": 3,
+    "failed": 1
+  }
+}

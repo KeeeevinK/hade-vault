@@ -1,7 +1,7 @@
 {
   "name": "hade-skills",
   "description": "HADE 的领域能力集合 —— 命名系统、可缩放预览布局陷阱、唯一仲裁源数据流模式。按需加载，与人格层解耦。",
-  "version": "0.1.0",
+  "version": "0.2.1",
   "author": {
     "name": "Kevin"
   },

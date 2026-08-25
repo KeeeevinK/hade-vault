@@ -1,0 +1,9 @@
+skill: code-traps
+description: 前端 / Electron 开发中的具体 API、CSS 与文本解析陷阱 —— preventDefault 会连文本选择一起杀、Electron 里 prompt()/alert() 不可用、flex:1 不配约束会无限膨胀、`-` 这类多义分隔符要先识别结构化模式再拆、括号内容要考虑独立匹配。写 e.preventDefault()、想弹输入框或确认框、写 flex 布局、拆分带分隔符的文本、解析含括号的文本时，都必须先读本 skill。这些是多轮翻车沉淀的教训，凭直觉写几乎必错。Use when writing preventDefault handlers, dialogs in Electron, flex layouts, or text-splitting parsers.
+
+
+结果: 1/4 通过
+  [FAIL] 0/3  expected=True  给这个侧边栏 div 加个 flex:1，让它占满剩余空间
+  [FAIL] 0/3  expected=True  删除前想弹个确认框，直接用 confirm() 可以吗？这是个 Electron 应用
+  [FAIL] 0/3  expected=True  帮我把这段文本按 - 拆开，里面有日期范围也有普通分隔
+  [PASS] 0/3  expected=False  帮我把这个 CSS 类名从 .btn-primary 改成 .btn-main
