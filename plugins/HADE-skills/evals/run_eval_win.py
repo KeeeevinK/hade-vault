@@ -6,10 +6,15 @@ stdout —— 在 Windows 上 select 只支持 socket，传 pipe 直接抛 OSErr
 该异常被官方代码的 `except Exception` 吞掉并记为「未触发」，结果是**安静地输出全 0%
 的假报告**，看上去像 skill 全部欠触发。这比崩溃更危险。
 
-本文件逐条照搬官方的触发检测逻辑（stream-json 事件 → Skill/Read 工具调用 →
-比对注入的 command 名），只把 select 轮询换成阻塞 readline + watchdog kill，
-并把 ProcessPoolExecutor 换成 ThreadPoolExecutor（IO-bound，且避免 Windows
-spawn 模式下的 pickle 问题）。官方 skill 的任何文件均未修改。
+本文件沿用官方的事件解析思路（stream-json → Skill/Read 工具调用），但把 select 轮询
+换成阻塞 readline + watchdog kill，把 ProcessPoolExecutor 换成 ThreadPoolExecutor
+（IO-bound，且避免 Windows spawn 模式下的 pickle 问题）。官方 skill 的任何文件均未修改。
+
+与官方的方法论差异（实测后修正）：官方注入一个临时 command 来"模拟"未安装的 skill，
+比对的是临时名。我们的 skill 已经真装上了，模型触发的是真名（HADE-skills:xxx），
+两个名字对不上 → 官方逻辑会把真实触发判成未触发（假阴性，实测确认）。
+故本版直接测**已安装 skill 的真实触发**：不注入、不模拟，扫完整轮对话看 Skill/Read
+是否指向目标 skill。这比模拟更接近真实场景。
 
 输出格式与官方 run_eval.py 一致，便于对照。
 
@@ -26,7 +31,6 @@ import shutil
 import subprocess
 import sys
 import threading
-import uuid
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
@@ -61,124 +65,74 @@ def run_single_query(
     project_root: str,
     model: str | None = None,
 ) -> bool:
-    """跑一条 query，返回 skill 是否被触发。
+    """跑一条 query，返回目标 skill 是否被真实触发。
 
-    在 project_root/.claude/commands/ 下注入一个临时 command 文件，使该 skill 出现在
-    Claude 的可用列表里，然后用 `claude -p` 跑原始 query，从 stream-json 里检测
-    Skill / Read 工具是否指向这个注入名。
+    skill 已通过 plugin 安装，无需注入模拟件。扫完整轮对话（直到 result 事件），
+    只要有任一 Skill 调用的 skill 参数含 skill_name，或任一 Read 的路径指向该
+    skill 目录，即判为触发。不因为"第一个工具不是 Skill"就提前判否 —— 模型完全
+    可能先做别的再读 skill。
     """
     claude_exe = shutil.which("claude")
     if not claude_exe:
         raise RuntimeError("PATH 里找不到 claude CLI")
 
-    unique_id = uuid.uuid4().hex[:8]
-    clean_name = f"{skill_name}-skill-{unique_id}"
-    commands_dir = Path(project_root) / ".claude" / "commands"
-    command_file = commands_dir / f"{clean_name}.md"
+    cmd = [
+        claude_exe,
+        "-p", query,
+        "--output-format", "stream-json",
+        "--verbose",
+    ]
+    if model:
+        cmd.extend(["--model", model])
 
+    env = {k: v for k, v in os.environ.items() if k != "CLAUDECODE"}
+
+    process = subprocess.Popen(
+        cmd,
+        stdin=subprocess.DEVNULL,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.DEVNULL,
+        cwd=project_root,
+        env=env,
+    )
+    killer = threading.Timer(timeout, lambda: process.poll() is None and process.kill())
+    killer.start()
+
+    triggered = False
     try:
-        commands_dir.mkdir(parents=True, exist_ok=True)
-        indented_desc = "\n  ".join(skill_description.split("\n"))
-        command_file.write_text(
-            f"---\ndescription: |\n  {indented_desc}\n---\n\n"
-            f"# {skill_name}\n\nThis skill handles: {skill_description}\n",
-            encoding="utf-8",
-        )
+        for raw in process.stdout:
+            line = raw.decode("utf-8", errors="replace").strip()
+            if not line:
+                continue
+            try:
+                event = json.loads(line)
+            except json.JSONDecodeError:
+                continue
 
-        cmd = [
-            claude_exe,
-            "-p", query,
-            "--output-format", "stream-json",
-            "--verbose",
-            "--include-partial-messages",
-        ]
-        if model:
-            cmd.extend(["--model", model])
-
-        # 去掉 CLAUDECODE，允许在 Claude Code session 内嵌套 claude -p
-        env = {k: v for k, v in os.environ.items() if k != "CLAUDECODE"}
-
-        process = subprocess.Popen(
-            cmd,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.DEVNULL,
-            cwd=project_root,
-            env=env,
-        )
-
-        # watchdog：readline 是阻塞的，超时靠杀进程让它返回 EOF
-        killer = threading.Timer(timeout, lambda: process.poll() is None and process.kill())
-        killer.start()
-
-        triggered = False
-        pending_tool_name = None
-        accumulated_json = ""
-
-        try:
-            for raw in process.stdout:
-                line = raw.decode("utf-8", errors="replace").strip()
-                if not line:
-                    continue
-                try:
-                    event = json.loads(line)
-                except json.JSONDecodeError:
-                    continue
-
-                if event.get("type") == "stream_event":
-                    se = event.get("event", {})
-                    se_type = se.get("type", "")
-
-                    if se_type == "content_block_start":
-                        cb = se.get("content_block", {})
-                        if cb.get("type") == "tool_use":
-                            tool_name = cb.get("name", "")
-                            if tool_name in ("Skill", "Read"):
-                                pending_tool_name = tool_name
-                                accumulated_json = ""
-                            else:
-                                return False
-
-                    elif se_type == "content_block_delta" and pending_tool_name:
-                        delta = se.get("delta", {})
-                        if delta.get("type") == "input_json_delta":
-                            accumulated_json += delta.get("partial_json", "")
-                            if clean_name in accumulated_json:
-                                return True
-
-                    elif se_type in ("content_block_stop", "message_stop"):
-                        if pending_tool_name:
-                            return clean_name in accumulated_json
-                        if se_type == "message_stop":
-                            return False
-
-                elif event.get("type") == "assistant":
-                    message = event.get("message", {})
-                    for item in message.get("content", []):
-                        if item.get("type") != "tool_use":
-                            continue
-                        tool_name = item.get("name", "")
-                        tool_input = item.get("input", {})
-                        if tool_name == "Skill" and clean_name in tool_input.get("skill", ""):
-                            triggered = True
-                        elif tool_name == "Read" and clean_name in tool_input.get("file_path", ""):
-                            triggered = True
-                        return triggered
-
-                elif event.get("type") == "result":
-                    return triggered
-        finally:
-            killer.cancel()
-            if process.poll() is None:
-                process.kill()
-            process.wait()
-
-        return triggered
+            if event.get("type") == "assistant":
+                for item in event.get("message", {}).get("content", []):
+                    if item.get("type") != "tool_use":
+                        continue
+                    tool_name = item.get("name", "")
+                    tool_input = item.get("input", {})
+                    if tool_name == "Skill" and skill_name in str(tool_input.get("skill", "")):
+                        triggered = True
+                    elif tool_name == "Read" and skill_name in str(tool_input.get("file_path", "")):
+                        triggered = True
+            elif event.get("type") == "result":
+                break
     finally:
-        if command_file.exists():
-            command_file.unlink()
+        killer.cancel()
+        if process.poll() is None:
+            process.kill()
+        process.wait()
+
+    return triggered
 
 
 def main():
+    sys.stdout.reconfigure(encoding="utf-8")
+    sys.stderr.reconfigure(encoding="utf-8")
     ap = argparse.ArgumentParser(description="Windows 兼容版 skill 触发率评测")
     ap.add_argument("--eval-set", required=True)
     ap.add_argument("--skill-path", required=True)

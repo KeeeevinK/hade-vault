@@ -1,0 +1,43 @@
+{
+  "skill_name": "naming-system",
+  "description": "HADE 家族工具的希腊词根命名系统 —— 词库分类表、选词四原则、兜底策略、工具映射表。任何时候要给新项目、新工具、新模块起代号或上架名，都必须先读本 skill，包括用户只是随口说\"这个叫什么好\"、\"取个名字\"、\"项目代号定一下\"、\"想个英文名\"。也用于校验已有代号是否符合家族规则，以及在新工具确定后更新工具映射表。Use whenever naming a new project, tool, module, or product codename.",
+  "results": [
+    {
+      "query": "我要新开一个做知识卡片复习的工具，帮我起个代号",
+      "should_trigger": true,
+      "trigger_rate": 1.0,
+      "triggers": 3,
+      "runs": 3,
+      "pass": true
+    },
+    {
+      "query": "这个项目叫什么好？",
+      "should_trigger": true,
+      "trigger_rate": 1.0,
+      "triggers": 3,
+      "runs": 3,
+      "pass": true
+    },
+    {
+      "query": "帮我看看 Cosmos 这个名字符不符合我们的命名规则",
+      "should_trigger": true,
+      "trigger_rate": 1.0,
+      "triggers": 3,
+      "runs": 3,
+      "pass": true
+    },
+    {
+      "query": "帮我把这个函数改个名字，现在叫 doStuff 太模糊了",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": true
+    }
+  ],
+  "summary": {
+    "total": 4,
+    "passed": 4,
+    "failed": 0
+  }
+}

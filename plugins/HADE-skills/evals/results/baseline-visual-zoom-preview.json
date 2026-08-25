@@ -1,0 +1,43 @@
+{
+  "skill_name": "visual-zoom-preview",
+  "description": "可缩放预览视图的布局陷阱与对齐原则 —— 呼吸比例锚点、单双页对称、焦点锚点、滚动条居中、窗口自适应。做任何带 zoom/scale 的画布、文档预览、A4 预览、分页预览、多面板缩放组件时必须先读本 skill；用户提到\"预览太大/太小\"、\"放大后跑偏\"、\"双页看着太松\"、\"滚动条不居中\"、\"缩放后看不到顶部\"这类症状时也必须读。这些是多轮翻车沉淀的教训，凭直觉写几乎必错。Use when building or debugging any zoomable preview/canvas component.",
+  "results": [
+    {
+      "query": "做一个 A4 文档预览组件，要能缩放，还要支持单页和双页切换",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": false
+    },
+    {
+      "query": "双页模式看着比单页松太多了，怎么回事",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": false
+    },
+    {
+      "query": "放大之后顶部内容跑到窗口外面看不见了",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": false
+    },
+    {
+      "query": "给这张图片加个点击放大的灯箱效果",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 3,
+      "pass": true
+    }
+  ],
+  "summary": {
+    "total": 4,
+    "passed": 1,
+    "failed": 3
+  }
+}
