@@ -2,8 +2,10 @@
 
 HADE 的可安装体 —— 一个 git 仓库同时是 marketplace、备份保险箱、版本化历史。
 
-> **状态：2026-08-24 形式重构完成（批0 → 批3 + §6.6 校验层 + 结构审查）。**
-> 完整执行记录见 `archive/PLAN-AND-EXECUTION-LOG.md`（1159 行）。
+> **状态：2026-08-24 形式重构完成（批0 → 批3 + §6.6 校验层 + 结构审查）；
+> 2026-08-26 收尾轮完成（私有远端 · 同步探针 · 记录清理 · hook 三项核验）。**
+> 完整执行记录见 `archive/PLAN-AND-EXECUTION-LOG.md`。
+> 下一轮 Plan 见 `archive/HADE_Plan_r2_2026-08-24.md`。
 
 ---
 
@@ -14,11 +16,19 @@ HADE 的可安装体 —— 一个 git 仓库同时是 marketplace、备份保�
 | **整体完成度、每批的门与结论** | `archive/PLAN-AND-EXECUTION-LOG.md` → 搜「📊 整体完成度」 |
 | **每一批的实测数字** | `plugins/hade-skills/evals/results/*.json`（40 个文件，含删原文前后对照） |
 | **本体现状** | `~/.claude/CLAUDE.md`（892 行）；仓库内副本 `plugins/hade-core/install/CLAUDE.md` |
-| **本体改了什么** | `git log` 23 个 commit；或对比 `archive/snapshots-2026-08-24/CLAUDE_Global_2026-07-16.md`（重构前基线 1089 行） |
+| **本体改了什么** | `git log`；或对比 `archive/snapshots-2026-08-24/CLAUDE_Global_2026-07-16.md`（重构前基线 **1090 行 / 91052 字节**） |
 | **决策史** | `archive/decision-log.md`（10 条，2026-08-24 从 Global §八 外移至此） |
 | **能力层装了什么** | `plugins/hade-skills/skills/`（5 个 skill + 2 个可执行校验器） |
 
-一句话验收：`git log --oneline` 看 23 个 commit，`archive/PLAN-AND-EXECUTION-LOG.md` 看为什么。
+一句话验收：`git log --oneline` 看做了什么，`archive/PLAN-AND-EXECUTION-LOG.md` 看为什么。
+
+**远端**：`https://github.com/KeeeevinK/hade-vault`（**private**）。
+异地 clone 已验证：commits/HEAD/文件数一致，9 份归档快照 SHA256 全部通过
+（`.gitattributes` 的 `* -text` 保证 CRLF 不被改写，否则 hash 会全部失配）。
+
+**数字口径**（此前混用致飘忽，现钉死）：行数按 `split('
+')` 计（末尾换行算一段），
+故 `wc -l` 少 1；字节按磁盘实际，本机为 CRLF。
 
 ---
 

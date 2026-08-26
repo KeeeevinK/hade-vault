@@ -1313,3 +1313,60 @@ rewrite 会让 28 个 commit 全部更换 hash，**这些引用一次性全部�
 
 遗留风险（已知且接受）：若仓库转为公开，**历史中的 28 个 commit 仍含真实邮箱**。
 届时若必须清除，再权衡"rewrite + 修复日志中所有 hash 引用"的总代价。
+
+## 补：F3 改动 diff 与 F4 文档依据（收尾轮 prompt「完成后」清单要求，前次报告漏给）
+
+### F3 · 唯一动 Global 处（commit `4663633`，1 insertion / 1 deletion）
+
+```diff
+- 行数比上次骤降（>30%）→ 异常（计划内的外移 / 退役除外 —— 前提是同一动作里已确认
+  内容落到 skill 或归档且可达）
++ 行数比仓库 HEAD 版本骤降（>30%）→ 异常（计划内的外移 / 退役除外 —— 前提是同一动作里
+  已确认内容落到 skill 或归档且可达）；基准取法：`git show HEAD:plugins/hade-core/install/CLAUDE.md`
+```
+
+判据（>30% 阈值、例外条件）一字未动，只把「上次」这个含混指代钉成可执行命令。
+
+### F3 · 记录类改动（commit `a858a19`，66 insertions / 41 deletions，不动 Global）
+
+```diff
+- **净 −197 行 / −18.1%。**
++ **净 −198 行 / −18.2%。**
+
+- **Global 瘦身 18.1% 未造成任何能力缺失。**
++ **Global 瘦身 18.2% 未造成任何能力缺失。**
+
+- Global    1089 → 891 行（−18.2%） / 91052 → 72167 字节（−20.7%）
++ Global    1090 → 892 行（−198 行 / −18.2%） / 91052 → 72327 字节（−16.0%）
+
++ | ③ **安全条款例外化** | **给已有安全闸门开口子** | **1** | §七 完整性自检「骤降 >30% → 异常」增例外 |
+```
+
+### F3 · 各 commit 规模一览
+
+| commit | 内容 | 规模 |
+|---|---|---|
+| `e00b0fd` | 仓库自足化（执行日志入库 · README 重写 · 清 __pycache__） | 4 files, +1232 / −14 |
+| `3f5cb31` | 同步探针 + v0.8.0 | 5 files, +524 / −4 |
+| `a858a19` | 数字修正 · 口径固定 · 记账三格 · 删重复 | 1 file, +66 / −41 |
+| `4663633` | §七 基准钉到 git HEAD | 1 file, +1 / −1 |
+| `c179bbd` | 收尾轮 F1–F4 记录 | 1 file, +104 |
+| `87aeb6e` | commit 身份裁决 | 1 file, +27 |
+
+### F4 · 依据的文档 URL
+
+**https://code.claude.com/docs/en/hooks**
+（原 `https://docs.claude.com/en/docs/claude-code/hooks` 已 301 重定向至此）
+
+引用的三处原文：
+
+1. **matcher 作用域** —— matcher patterns 表：
+   `PreToolUse, PostToolUse, PostToolUseFailure, PermissionRequest, PermissionDenied` → 过滤 **tool name**。
+   路径过滤走 common fields 的 `if`：「`if` 使用 permission rule 语法，同时匹配工具名与参数，
+   `"Edit(*.ts)"` 只在 TypeScript 文件上运行」。
+2. **PostToolUse stdin schema** —— 文档该节被截断，仅给出 PreToolUse 示例。
+   故 `tool_input` / `tool_response` 的存在与字段构成**由本轮实测确定**，非文档依据。
+3. **stdout 归属** —— exit code 0 段：「For most events, stdout is written to the debug log
+   but not shown in the transcript. The exceptions are `UserPromptSubmit`,
+   `UserPromptExpansion`, and `SessionStart`...」；
+   exit code 2 行为表：`PostToolUse` | No | 「**Shows stderr to Claude**; the tool already ran」。
