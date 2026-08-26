@@ -1,3 +1,10 @@
+> ⛔ **过时文件，请勿照做。**
+> 这是原作者机器上 2026-08-24 的一次性执行记录，含他的绝对路径、机器名，
+> 以及已废弃的旧 plugin 名（`HADE-skills` → 现为 `hade-skills`）与已执行完的 GLOBAL_PATCH 步骤。
+> **要安装请读 [`AGENT-SETUP.md`](AGENT-SETUP.md)**（给 AI 的执行指令）
+> 或 [`GETTING-STARTED.md`](GETTING-STARTED.md)（给人的介绍）。
+> 本文件仅作历史留存。
+
 # INSTALL — 批0 + 批1 安装与验证
 
 > 目标机器：Windows（laptop-286paatu）。以下命令在**本机 Claude Code session** 里执行。

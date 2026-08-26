@@ -2,8 +2,10 @@
 
 HADE 的可安装体 —— 一个 git 仓库同时是 marketplace、备份保险箱、版本化历史。
 
-> **第一次拿到这份仓库？先读 [`GETTING-STARTED.md`](GETTING-STARTED.md)** ——
-> 三种采用方式、装之前必须知道的坑、以及这套系统实测出来的方法论。
+> **第一次拿到这份仓库？**
+> · 人读 → [`GETTING-STARTED.md`](GETTING-STARTED.md)（三种采用方式 · 坑 · 方法论）
+> · 让 AI 装 → [`AGENT-SETUP.md`](AGENT-SETUP.md)（可直接执行的安装指令）
+> · `INSTALL.md` / `GLOBAL_PATCH.md` 是过时的历史记录，**勿照做**
 
 > **状态：2026-08-24 形式重构完成（批0 → 批3 + §6.6 校验层 + 结构审查）；
 > 2026-08-26 收尾轮完成（私有远端 · 同步探针 · 记录清理 · hook 三项核验）。**
