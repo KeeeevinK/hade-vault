@@ -22,7 +22,7 @@ import re
 import sys
 
 
-def parse_color(s: str) -> tuple[float, float, float]:
+def parse_color(s):
     """接受 #rgb / #rrggbb / hsl(h,s%,l%)，返回 (H 0-360, S 0-100, L 0-100)。"""
     s = s.strip()
     m = re.fullmatch(r"hsl\(\s*(\d+(?:\.\d+)?)\s*,\s*(\d+(?:\.\d+)?)%?\s*,\s*(\d+(?:\.\d+)?)%?\s*\)", s, re.I)
@@ -39,7 +39,7 @@ def parse_color(s: str) -> tuple[float, float, float]:
     return H, S * 100, L * 100
 
 
-def hue_gap(a: float, b: float) -> float:
+def hue_gap(a, b):
     d = abs(a - b) % 360
     return min(d, 360 - d)
 
@@ -58,14 +58,14 @@ IOS_ANCHORS = {
 }
 
 
-def ios_anchor(H: float, S: float, L: float) -> str | None:
+def ios_anchor(H, S, L):
     for (h, s_, l_), label in IOS_ANCHORS.items():
         if hue_gap(H, h) < 3 and abs(S - s_) < 3 and abs(L - l_) < 3:
             return label
     return None
 
 
-def check_one(name: str, hsl: tuple[float, float, float], area: str) -> list[str]:
+def check_one(name, hsl, area):
     H, S, L = hsl
     errs = []
 
@@ -90,7 +90,7 @@ def check_one(name: str, hsl: tuple[float, float, float], area: str) -> list[str
     return errs
 
 
-def main() -> int:
+def main():
     # Windows 控制台默认 GBK，输出 ✔/✘/° 会崩
     for stream in (sys.stdout, sys.stderr):
         try: stream.reconfigure(encoding="utf-8")

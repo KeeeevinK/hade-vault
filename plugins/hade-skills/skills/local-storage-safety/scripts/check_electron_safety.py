@@ -19,7 +19,7 @@ import sys
 from pathlib import Path
 
 
-def find_main(root: Path) -> Path | None:
+def find_main(root):
     for c in ["electron/main.js", "electron/main.cjs", "electron/main.ts",
               "src/main/index.js", "main.js", "app/main.js"]:
         p = root / c
@@ -32,7 +32,7 @@ def find_main(root: Path) -> Path | None:
     return hits[0] if hits else None
 
 
-def main() -> int:
+def main():
     for st in (sys.stdout, sys.stderr):
         try: st.reconfigure(encoding="utf-8")
         except Exception: pass
