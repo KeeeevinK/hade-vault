@@ -1286,3 +1286,30 @@ mtime 可能误导（从备份恢复会让正确的那份反而更旧），探�
 | Global | 891 行 / 24 commits | **892 行（split 口径）/ 27 commits** |
 | 能力层 | 5 skill + 2 校验器，其中 1 个触发率 0 | 不变（`local-storage-safety` 仍 0，待下一轮 hook 方案解决） |
 | 远端备份 | 无 | **`KeeeevinK/hade-vault`（private）** |
+
+## 裁决 · commit 身份（用户授权自主决定）
+
+**决定：历史不动；从 2026-08-26 起的新 commit 改用 GitHub noreply 邮箱。**
+
+现状：前 28 个 commit 的 author 为 `HADE <keeevink202@outlook.com>`，
+本机 git 全局身份为 `KeeeevinK <qwkqwk1@163.com>`。
+
+**为什么不 rewrite 历史**（这是决定性理由，非嫌麻烦）：
+本执行日志中多处以 commit hash 作为**回滚源**引用 ——
+`2356c36`（§十 外移前的本体）· `5521b0e`（批2 回滚点）· `4cce4ef`（批3 前）· `fc35484`（批0 基线）等。
+rewrite 会让 28 个 commit 全部更换 hash，**这些引用一次性全部悬空**。
+
+这与本轮结构审查修掉的 §十 悬空锚点是**同一类病**，且这批引用指向的是
+安全机制里的回滚路径。为邮箱一致性去损坏回滚路径，不划算。
+
+**采取的折中**（零代价解决未来风险）：
+仓库级 `git config` 设为 `HADE <187881272+KeeeevinK@users.noreply.github.com>`。
+
+- 历史完整，所有 commit 引用继续有效
+- 未来 commit 不再写入真实邮箱 —— 即使日后转公开也不泄露
+- GitHub 仍能通过 noreply 邮箱把 commit 归属到 `KeeeevinK` 账号
+- author name 保留 **HADE**：这些 commit 确实由 HADE 做出，署名记录真实作者（§八.6 人格连续性）
+- **只改仓库级配置，用户全局 git 身份未动**（仍为 `KeeeevinK <qwkqwk1@163.com>`）
+
+遗留风险（已知且接受）：若仓库转为公开，**历史中的 28 个 commit 仍含真实邮箱**。
+届时若必须清除，再权衡"rewrite + 修复日志中所有 hash 引用"的总代价。
