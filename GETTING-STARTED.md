@@ -184,4 +184,4 @@ select() 在 Windows 崩 / 子进程未登录 / 测试比对的名字不匹配 /
 | 下一轮计划（hook 容器赌注） | `archive/HADE_Plan_r2_2026-08-24.md` |
 | 人格层全文 | `plugins/hade-core/install/CLAUDE.md` |
 
-`git log` 有 34 个 commit，每个都是可回滚节点，message 写的是实测结果不是"完成 X"。
+`git log` 里每个 commit 都是可回滚节点，message 写的是实测结果而不是"完成 X"。
