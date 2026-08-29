@@ -101,13 +101,34 @@ hook 就成了"提醒每个 session 去读用户自己的规则"—— 这正是
 
 **只有用户明确要求才做。执行前必须备份。**
 
-```bash
-# 1. 备份用户现有的（若存在）
-cp ~/.claude/CLAUDE.md ~/.claude/CLAUDE.md.backup-$(date +%Y%m%d)
+⚠️ **本体末尾有 `@hade/cases.md` 导入。实测：导入目标缺失时静默失败 ——
+不报错、不警告，内容就是不在。** 只拷 `CLAUDE.md` 会得到一份带着 17 处
+「反例：见记忆层 M-xx」却永远查不到内容的规则文件。**必须连 `hade/` 一起拷。**
 
-# 2. 复制原作者的本体
+先问用户要哪种记忆层：
+
+**C-1 · 带原作者的记忆**（能看到真实的项目翻车记录，最有参考价值）
+```bash
+cp ~/.claude/CLAUDE.md ~/.claude/CLAUDE.md.backup-$(date +%Y%m%d)   # 先备份
 cp <仓库>/plugins/hade-core/install/CLAUDE.md ~/.claude/CLAUDE.md
+mkdir -p ~/.claude/hade
+cp <仓库>/plugins/hade-core/install/hade/cases.md ~/.claude/hade/cases.md
 ```
+
+**C-2 · 空记忆层，从零积累自己的**（推荐给长期使用）
+```bash
+cp ~/.claude/CLAUDE.md ~/.claude/CLAUDE.md.backup-$(date +%Y%m%d)   # 先备份
+cp <仓库>/plugins/hade-core/install/CLAUDE.md ~/.claude/CLAUDE.md
+mkdir -p ~/.claude/hade
+cp <仓库>/plugins/hade-core/install/hade/cases.template.md ~/.claude/hade/cases.md
+```
+
+C-2 之后骨架里那 17 处 `反例：见记忆层 M-xx` 会指向空 —— 这**不影响规则可用**
+（触发/动作/原因都在骨架里），但可以让用户逐步用自己的经历填回去。
+
+**验证导入是否生效**（缺失是静默的，必须主动验）：
+新 session 里问「不要读文件，你能看到记忆层里的内容吗」——
+C-1 应能复述具体条目，C-2 应回答记忆层是空模板。
 
 装完提醒用户：**这份人格层不是为他写的**。里面的项目名、原话、
 协作约定都是原作者的。建议他当参照读，逐条挑对自己成立的部分，

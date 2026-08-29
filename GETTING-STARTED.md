@@ -70,11 +70,23 @@
 
 ### 方式 C · 完整采用 Kevin 的本体（会覆盖你的规则）
 
+本体分两层：**骨架**（894 行，规则）+ **记忆层**（`hade/cases.md`，17 条具体翻车记录）。
+骨架末尾用 `@hade/cases.md` 导入 —— 启动时展开进上下文，实测唤醒力与写在一起时相同。
+
 ```bash
-# 先备份你自己的！
-cp ~/.claude/CLAUDE.md ~/.claude/CLAUDE.md.backup
+cp ~/.claude/CLAUDE.md ~/.claude/CLAUDE.md.backup      # 先备份你自己的！
 cp <仓库>/plugins/hade-core/install/CLAUDE.md ~/.claude/CLAUDE.md
+mkdir -p ~/.claude/hade
+
+# 二选一：
+cp <仓库>/plugins/hade-core/install/hade/cases.md ~/.claude/hade/cases.md          # 带 Kevin 的记忆
+cp <仓库>/plugins/hade-core/install/hade/cases.template.md ~/.claude/hade/cases.md # 空的，从零积累
 ```
+
+⚠️ **必须连 `hade/` 一起拷。** 实测：import 目标缺失时**静默失败**，不报错也不警告，
+你会得到一份带着 17 处「反例：见记忆层 M-xx」却查不到内容的规则文件。
+
+**随时擦除**：清空 `~/.claude/hade/cases.md` 即可，骨架规则完全不受影响。
 
 **这一步会用别人的人格层替换你的。** 里面写着 Kevin 的工作习惯、
 他的项目、他的原话、他和 Claude 约定的协作方式。
