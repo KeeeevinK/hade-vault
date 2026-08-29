@@ -101,7 +101,7 @@ cp <仓库>/plugins/hade-core/install/hade/cases.template.md ~/.claude/hade/case
 |---|---|---|
 | `naming-system` | 希腊词根命名系统，给项目/工具取代号 | 4/4 |
 | `visual-zoom-preview` | 可缩放预览的布局陷阱（呼吸比例、单双页对称、焦点锚点） | 4/4 |
-| `single-source-arbitration` | 多路径分配场景的唯一仲裁源数据流架构 | 4/4 |
+| `single-source-arbitration` | 多路径分配场景的唯一仲裁源数据流架构 | 4/4 → 1/4 ⚠ |
 | `design-color` | 色彩系统：双通道模型、饱和度禁区、面积约束、并置间距 | 4/4 |
 | `local-storage-safety` | Electron/Tauri 数据安全三件套校验器（纯工具容器） | 0/9 ⚠ |
 
@@ -174,6 +174,15 @@ select() 在 Windows 崩 / 子进程未登录 / 测试比对的名字不匹配 /
 
 ## 七、已知局限（诚实清单）
 
+- **触发率不是稳定值。** `single-source-arbitration` 同一批 query 先测得 4/4，
+  几小时后重测降到 1/4 —— 而 description 与其中两条 query **一字未改**。
+  逐轮追查发现：模型没调 skill，但两种场景下都做对了事（空目录里按规则拒绝猜测、
+  要求先给项目路径；有真实代码时直接读出 `assignRow` 按 id 匹配、`propagateToAll`
+  按 text 匹配的差异，并指出两者返回形状不一致会写坏 state）。
+  **它跳过工具是因为读 12 行代码就够了**，不是因为 skill 失效。
+  → 这条量具测的是「调不调 skill」，不是「做得对不对」。**看到低触发率时先确认
+  模型实际做了什么，再判断是不是退化。** 原因未完全确证（可能含模型行为波动），
+  如实记录不粉饰。
 - **`local-storage-safety` 触发率 0/9**：description 匹配不到它的真实触发时机。
   规则正文因此保留在人格层，skill 只作为工具容器存在。要手动 `/skill` 调用。
 - **hook 告警的采纳率未充分验证**：已验证 `PostToolUse` 的 `exit 2 + stderr` 能把

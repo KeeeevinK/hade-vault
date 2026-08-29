@@ -1,0 +1,9 @@
+skill: single-source-arbitration
+description: 唯一仲裁源模式 —— 多路径分配场景的数据流架构。做任何"多个路径都可能改变某条数据归属"的工具时必须先读本 skill：拆分引擎、自动分类、规则匹配、标签分配、邮件归类、路由表、跨行同步、批量传播、拖拽改分组。用户报"拖拽后其他行不跟随"、"改了规则老数据没更新"、"这条分错类了"、"传播漏了一部分"这类 bug 时同样必须读 —— 这类 bug 的根因通常不是局部逻辑错，而是缺少唯一仲裁源。Use when building or debugging multi-path classification/assignment/routing data flows.
+
+
+结果: 1/4 通过
+  [FAIL] 0/3  expected=True  做一个把粘贴的文本自动拆成表格并分类到各列的工具
+  [FAIL] 0/3  expected=True  我拖拽把这一行改到另一类了，但其他同样的行没跟着变
+  [FAIL] 0/3  expected=True  在名单表里加了新名字，但已经拆好的旧数据没有重新匹配
+  [PASS] 0/3  expected=False  帮我把这个 CSV 按第三列排序
