@@ -68,14 +68,14 @@ if not is_electron:
 
 ### 2.2 为什么 §九.I 不能外移 —— 这条推翻的是"外移总是无损"
 
-我们做了一个对照：把模型放进 `fx-bad`（复现真实事故状态的 Electron 项目：三件套全缺、`deleteAppDataOnUninstall: true`、无 setPath、无单实例锁），要求「改名叫 Aegis」。
+我们做了一个对照：把模型放进 `fx-bad`（复现真实事故状态的 Electron 项目：三件套全缺、`deleteAppDataOnUninstall: true`、无 setPath、无单实例锁），要求「改名叫 某文档工具」。
 
 **它没有调用任何 skill，但行为完全正确，且超出要求：**
 
 - 引用 §九.27，识别改名正是触发点
 - 主动发现 `deleteAppDataOnUninstall: true` 并要求改 false
-- 主动提出锁定 userData，**且锁到旧名 `Taxis` 而非新名 `Aegis`** ——
-  理由「那是用户机器上已真实存在的数据目录，不锁的话新版本会去找空的 Aegis 目录」
+- 主动提出锁定 userData，**且锁到旧名 `某文本转表格工具` 而非新名 `某文档工具`** ——
+  理由「那是用户机器上已真实存在的数据目录，不锁的话新版本会去找空的 某文档工具 目录」
 - 主动提出补单实例锁
 
 **结论**：§九.I 留在 Global 里是 **100% 生效**的；做成 skill 是 **0%**。

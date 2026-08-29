@@ -23,7 +23,7 @@
 
 ### M-04 · 三、对话习惯
 
-- 2026-05-05 Aegis"原文窄"我猜 margin / word-break / overflow-wrap / inline-style 共 5 轮全错。直到拉用户跑 F12 看 innerHTML → 发现 `<v:shape style="position:absolute;width:96.6pt">` Word VML 标签把布局卡住。第一轮就该让用户跑 F12,不该猜。
+- 2026-05-05 某文档工具"原文窄"我猜 margin / word-break / overflow-wrap / inline-style 共 5 轮全错。直到拉用户跑 F12 看 innerHTML → 发现 `<v:shape style="position:absolute;width:96.6pt">` Word VML 标签把布局卡住。第一轮就该让用户跑 F12,不该猜。
  - 任何"先试试看"的念头都是猜。试试看 = 不知道因 + 想拿用户当试错回路。
 
 ### M-05 · 八、HADE 身份与协作原则
@@ -49,25 +49,25 @@ Q2 合并撤回分析,我靠上下文猜用户场景("他在单页还是双页?z
 
 ### M-10 · 九、HADE 的已知易犯错误模式
 
-用户说"配置页面按钮灰→绿",代码里 `.btn-add`(虚线"+添加部门") 和 `.btn-add-inline`(实心"添加人员") 都是添加按钮,第一轮只改一个,第二轮为补齐又改了另一个 → 用户纠正"那个别动" → 回退。应该第一次就问"是哪个按钮?"
+用户说"配置页面按钮灰→绿",代码里 `.btn-add`(虚线"+添加分组") 和 `.btn-add-inline`(实心"添加成员") 都是添加按钮,第一轮只改一个,第二轮为补齐又改了另一个 → 用户纠正"那个别动" → 回退。应该第一次就问"是哪个按钮?"
 
 ### M-11 · 九、HADE 的已知易犯错误模式
 
-Taxis 项目从 `outing-tool` 改名 `taxis` → 新安装包打开空白 → 用户"我的项目不见了" → 靠手动 Copy-Item 迁移才救回。如果早锁定 userData 路径，改名和数据彻底解耦。
+某文本转表格工具 项目从 `legacy-name` 改名 `text2table` → 新安装包打开空白 → 用户"我的项目不见了" → 靠手动 Copy-Item 迁移才救回。如果早锁定 userData 路径，改名和数据彻底解耦。
 
 ### M-12 · 九、HADE 的已知易犯错误模式
 
-Taxis 配置曾是 `true`，用户问过"升级会不会丢数据"，HADE 没核对字段就回"不会"。幸运的是实际数据丢失是改名导致的；但这颗 `true` 炸弹本身就是地雷。
+某文本转表格工具 配置曾是 `true`，用户问过"升级会不会丢数据"，HADE 没核对字段就回"不会"。幸运的是实际数据丢失是改名导致的；但这颗 `true` 炸弹本身就是地雷。
 
 ### M-13 · 九、HADE 的已知易犯错误模式
 
-HADE 把 `name: outing-tool` 改成 `name: taxis` 没提数据路径问题，用户自行升级后才炸。
+HADE 把 `name: legacy-name` 改成 `name: text2table` 没提数据路径问题，用户自行升级后才炸。
 
 ### M-14 · 九、HADE 的已知易犯错误模式
 
-- Hora V2.5 早期：单实例锁缺失 → 用户双击快捷方式 → 第二个进程开出"初始化界面"
-- Hora V2.5 早期：userData 跟随 `package.json.name = "aaa-temp"` 漂移 → 改名计划被卡住，怕丢数据
-- Taxis：`deleteAppDataOnUninstall: true` 没纠正 → 升级流程会清空 AppData（侥幸先被改名问题暴露）
+- 某日程工具 V2.5 早期：单实例锁缺失 → 用户双击快捷方式 → 第二个进程开出"初始化界面"
+- 某日程工具 V2.5 早期：userData 跟随 `package.json.name = "tmp-name"` 漂移 → 改名计划被卡住，怕丢数据
+- 某文本转表格工具：`deleteAppDataOnUninstall: true` 没纠正 → 升级流程会清空 AppData（侥幸先被改名问题暴露）
 
 ### M-15 · 九、HADE 的已知易犯错误模式
 

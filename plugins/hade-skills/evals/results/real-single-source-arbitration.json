@@ -19,7 +19,7 @@
       "pass": true
     },
     {
-      "query": "在花名册里加了新名字，但已经拆好的旧数据没有重新匹配",
+      "query": "在名单表里加了新名字，但已经拆好的旧数据没有重新匹配",
       "should_trigger": true,
       "trigger_rate": 1.0,
       "triggers": 3,

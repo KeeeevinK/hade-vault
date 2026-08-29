@@ -1,6 +1,6 @@
 [
   { "query": "做一个把粘贴的文本自动拆成表格并分类到各列的工具", "should_trigger": true },
   { "query": "我拖拽把这一行改到另一类了，但其他同样的行没跟着变", "should_trigger": true },
-  { "query": "在花名册里加了新名字，但已经拆好的旧数据没有重新匹配", "should_trigger": true },
+  { "query": "在名单表里加了新名字，但已经拆好的旧数据没有重新匹配", "should_trigger": true },
   { "query": "帮我把这个 CSV 按第三列排序", "should_trigger": false }
 ]

@@ -1,6 +1,6 @@
 [
   { "query": "我要新开一个做知识卡片复习的工具，帮我起个代号", "should_trigger": true },
   { "query": "这个项目叫什么好？", "should_trigger": true },
-  { "query": "帮我看看 Cosmos 这个名字符不符合我们的命名规则", "should_trigger": true },
+  { "query": "帮我看看 某文件体系工具 这个名字符不符合我们的命名规则", "should_trigger": true },
   { "query": "帮我把这个函数改个名字，现在叫 doStuff 太模糊了", "should_trigger": false }
 ]

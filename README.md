@@ -21,15 +21,15 @@ HADE 的可安装体 —— 一个 git 仓库同时是 marketplace、备份保�
 | **整体完成度、每批的门与结论** | `archive/PLAN-AND-EXECUTION-LOG.md` → 搜「📊 整体完成度」 |
 | **每一批的实测数字** | `plugins/hade-skills/evals/results/*.json`（40 个文件，含删原文前后对照） |
 | **本体现状** | `~/.claude/CLAUDE.md`（892 行）；仓库内副本 `plugins/hade-core/install/CLAUDE.md` |
-| **本体改了什么** | `git log`；或对比 `archive/snapshots-2026-08-24/CLAUDE_Global_2026-07-16.md`（重构前基线 **1090 行 / 91052 字节**） |
+| **本体改了什么** | `git log`（重构前基线 **1090 行 / 91052 字节**，快照见 git 历史） |
 | **决策史** | `archive/decision-log.md`（10 条，2026-08-24 从 Global §八 外移至此） |
 | **能力层装了什么** | `plugins/hade-skills/skills/`（5 个 skill + 2 个可执行校验器） |
 
 一句话验收：`git log --oneline` 看做了什么，`archive/PLAN-AND-EXECUTION-LOG.md` 看为什么。
 
-**远端**：`https://github.com/KeeeevinK/hade-vault`（**private**）。
-异地 clone 已验证：commits/HEAD/文件数一致，9 份归档快照 SHA256 全部通过
-（`.gitattributes` 的 `* -text` 保证 CRLF 不被改写，否则 hash 会全部失配）。
+**远端**：`https://github.com/<用户>/hade-vault`（**private**）。
+异地 clone 已验证：commits/HEAD/文件数一致。
+（`.gitattributes` 的 `* -text` 保证 CRLF 不被改写。）
 
 **数字口径**（此前混用致飘忽，现钉死）：行数按换行符分段计，末尾换行算一段，
 故 `wc -l` 会少 1；字节按磁盘实际存储计，本机为 CRLF。

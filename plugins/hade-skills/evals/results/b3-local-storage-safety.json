@@ -1,9 +1,9 @@
 {
   "skill_name": "local-storage-safety",
-  "description": "Electron / Tauri 桌面工具的本地数据安全铁律 —— userData 路径必须 setPath 锁死不靠 package.json.name 推断、deleteAppDataOnUninstall 必须显式 false、历史路径清单与自动迁移、单实例锁，四条缺一即静默数据炸弹。以下任一情况必须先读本 skill 再动手，没有例外：① 要动 package.json 的 name / productName / appId / version 以外任何字段；② 要改 userData 路径、localStorage key 前缀、IndexedDB 库名、任何数据定位相关的字符串；③ 给项目改名、取代号、换 slug；④ 写或改打包配置（nsis / build / electron-builder）；⑤ 新建带本地存档的桌面工具；⑥ 用户问\"升级会不会丢数据\"。判据不是\"这算不算大改\" —— 只要你正要碰的那个字符串参与决定数据存在哪里，就必须读。这些条目全部来自真实的数据丢失事故（Taxis 改名后用户\"我的项目不见了\"）。MUST read before touching ANY data-location config in a desktop app: userData path, package.json name/productName/appId, storage key prefix, or packaging config.",
+  "description": "Electron / Tauri 桌面工具的本地数据安全铁律 —— userData 路径必须 setPath 锁死不靠 package.json.name 推断、deleteAppDataOnUninstall 必须显式 false、历史路径清单与自动迁移、单实例锁，四条缺一即静默数据炸弹。以下任一情况必须先读本 skill 再动手，没有例外：① 要动 package.json 的 name / productName / appId / version 以外任何字段；② 要改 userData 路径、localStorage key 前缀、IndexedDB 库名、任何数据定位相关的字符串；③ 给项目改名、取代号、换 slug；④ 写或改打包配置（nsis / build / electron-builder）；⑤ 新建带本地存档的桌面工具；⑥ 用户问\"升级会不会丢数据\"。判据不是\"这算不算大改\" —— 只要你正要碰的那个字符串参与决定数据存在哪里，就必须读。这些条目全部来自真实的数据丢失事故（某文本转表格工具 改名后用户\"我的项目不见了\"）。MUST read before touching ANY data-location config in a desktop app: userData path, package.json name/productName/appId, storage key prefix, or packaging config.",
   "results": [
     {
-      "query": "把这个 Electron 项目改名叫 Taxis，package.json 里的 name 也一起改",
+      "query": "把这个 Electron 项目改名叫 某文本转表格工具，package.json 里的 name 也一起改",
       "should_trigger": true,
       "trigger_rate": 0.0,
       "triggers": 0,

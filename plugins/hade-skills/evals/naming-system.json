@@ -4,7 +4,7 @@
   "evals": [
     { "id": 1, "prompt": "我要新开一个做知识卡片复习的工具，帮我起个代号", "expected_output": "读 naming-system，从「知识/记忆」域给候选（Mneme/Logos/Gnosis/Sophia），按选词四原则筛，给 1-2 个推荐 + 理由", "files": [] },
     { "id": 2, "prompt": "这个项目叫什么好？", "expected_output": "读 naming-system；先问产品核心本质（流程第1步），再从对应功能域挑候选", "files": [] },
-    { "id": 3, "prompt": "帮我看看 Cosmos 这个名字符不符合我们的命名规则", "expected_output": "读 naming-system，对照选词四原则与词库分类表（Cosmos 属「秩序/结构」域）校验", "files": [] },
+    { "id": 3, "prompt": "帮我看看 某文件体系工具 这个名字符不符合我们的命名规则", "expected_output": "读 naming-system，对照选词四原则与词库分类表（某文件体系工具 属「秩序/结构」域）校验", "files": [] },
     { "id": 4, "prompt": "帮我把这个函数改个名字，现在叫 doStuff 太模糊了", "expected_output": "不应触发 naming-system —— 这是代码标识符命名，不是项目/工具代号", "files": [] }
   ]
 }

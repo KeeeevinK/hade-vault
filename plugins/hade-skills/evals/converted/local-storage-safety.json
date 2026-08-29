@@ -1,5 +1,5 @@
 [
-  { "query": "把这个 Electron 项目改名叫 Aegis，package.json 里的 name 和 productName 都改掉", "should_trigger": true },
+  { "query": "把这个 Electron 项目改名叫 某文档工具，package.json 里的 name 和 productName 都改掉", "should_trigger": true },
   { "query": "这个桌面工具升级会不会丢用户数据？", "should_trigger": true },
   { "query": "帮我配一下 electron-builder，打个 Windows 安装包", "should_trigger": true },
   { "query": "帮我给这个 React 组件加个 loading 状态", "should_trigger": false }

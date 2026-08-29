@@ -19,7 +19,7 @@
       "pass": true
     },
     {
-      "query": "帮我看看 Cosmos 这个名字符不符合我们的命名规则",
+      "query": "帮我看看 某文件体系工具 这个名字符不符合我们的命名规则",
       "should_trigger": true,
       "trigger_rate": 1.0,
       "triggers": 3,

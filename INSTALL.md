@@ -7,7 +7,7 @@
 
 # INSTALL — 批0 + 批1 安装与验证
 
-> 目标机器：Windows（laptop-286paatu）。以下命令在**本机 Claude Code session** 里执行。
+> 目标机器：Windows（本机）。以下命令在**本机 Claude Code session** 里执行。
 > 全程不需要联网，不需要 GitHub —— 本地 marketplace 即可。
 
 ---
