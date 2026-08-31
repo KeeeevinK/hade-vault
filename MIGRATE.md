@@ -164,3 +164,55 @@ cp D:/HADE-vault/plugins/hade-core/install/hade/cases.template.md ~/.claude/hade
 
 骨架里那 17 处引用会指向空 —— **规则本身仍完整有效**
 （触发/动作/原因都在骨架里），只是少了「我在这里错过」那层具体记忆。
+
+---
+
+# 卸载 · 恢复成原始 Claude Code
+
+> **卸载不碰仓库。** `HADE-vault/` 与 GitHub 私有远端保持不动，
+> 随时可以照前面的步骤重新装回来。
+
+## 完整卸载（四步）
+
+```bash
+# ① 卸 plugin（唤醒 hook + 5 个 skill 一起走）
+claude plugin uninstall hade-core@hade-vault
+claude plugin uninstall hade-skills@hade-vault
+
+# ② 移除 marketplace 注册
+claude plugin marketplace remove hade-vault
+
+# ③ 清缓存（Windows 大小写不敏感，不清会留残骸）
+rm -rf ~/.claude/plugins/cache/hade-vault
+
+# ④ 移走人格层与记忆层 —— 建议改名而不是删除，留条后路
+mv ~/.claude/CLAUDE.md ~/.claude/CLAUDE.md.hade-backup
+mv ~/.claude/hade ~/.claude/hade.backup
+```
+
+第 ④ 步用 `mv` 不用 `rm`：万一想装回来，改回名字就行，不必再从仓库拷。
+确定不要了再删那两个 backup。
+
+## 验证已恢复
+
+开一个**新** session：
+
+- 开头**不再有**「[HADE 唤醒指针]」
+- 问「你有哪些 hade skill」→ 应答没有
+- 行为回到默认 Claude Code：不发破坏性预警、不按 §九.23 拒绝猜测
+
+## 只想停用、不想删
+
+不删任何文件，只关掉：
+
+```bash
+claude plugin disable hade-core@hade-vault
+claude plugin disable hade-skills@hade-vault
+```
+
+人格层（`~/.claude/CLAUDE.md`）仍会被 Claude Code 加载 ——
+它是标准的用户级配置文件，与 plugin 无关。**要连规则一起停，必须移走那个文件。**
+
+## 装回来
+
+照本文档第 2、3 步做即可。仓库没动过，`git pull` 一下拿最新的就行。
