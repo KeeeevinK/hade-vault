@@ -5,6 +5,7 @@ HADE 的可安装体 —— 一个 git 仓库同时是 marketplace、备份保�
 > **第一次拿到这份仓库？**
 > · 人读 → [`GETTING-STARTED.md`](GETTING-STARTED.md)（三种采用方式 · 坑 · 方法论）
 > · 让 AI 装 → [`AGENT-SETUP.md`](AGENT-SETUP.md)（可直接执行的安装指令）
+> · 自己换新电脑 → [`MIGRATE.md`](MIGRATE.md)（完整迁移：骨架 + 记忆层 + skill）
 > · `INSTALL.md` / `GLOBAL_PATCH.md` 是过时的历史记录，**勿照做**
 
 > **状态：2026-08-24 形式重构完成（批0 → 批3 + §6.6 校验层 + 结构审查）；
