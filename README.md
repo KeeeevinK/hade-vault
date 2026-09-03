@@ -61,8 +61,10 @@ tools/                               卸载 / 还原 / 体检（零依赖 Node�
 archive/
   PLAN-AND-EXECUTION-LOG.md          ★ 完整 Plan + 全部执行记录与实测证据
   decision-log.md                    决策史（10 条）
-  snapshots-2026-08-24/              批0 全量快照（9 份，SHA256 可校验）
-  SHA256SUMS.txt
+  HADE_Plan_r2_2026-08-24.md         下一轮计划（hook 容器赌注）
+  HADE_PROMPT_收尾轮.md              收尾轮 F1-F4 的原始指令
+  HADE_Response_to_B_2026-08-26.md   对外部质疑的逐条回应
+  （批0 的 9 份全量快照与 SHA256SUMS.txt 已在 7580e60 脱敏时移除）
 GLOBAL_PATCH.md · INSTALL.md         批0/批1 的原始安装文档（已执行完毕，留存备查）
 ```
 
