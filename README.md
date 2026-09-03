@@ -9,8 +9,11 @@ HADE 的可安装体 —— 一个 git 仓库同时是 marketplace、备份保�
 > · 想卸载 / 先体检 → [`tools/README.md`](tools/README.md)（双击 `tools/HADE-卸载器.cmd` 开可视化界面）
 > · `INSTALL.md` / `GLOBAL_PATCH.md` 是过时的历史记录，**勿照做**
 
-> **状态：2026-08-24 形式重构完成（批0 → 批3 + §6.6 校验层 + 结构审查）；
-> 2026-08-26 收尾轮完成（私有远端 · 同步探针 · 记录清理 · hook 三项核验）。**
+> **状态**
+> · 2026-08-24 形式重构完成（批0 → 批3 + §6.6 校验层 + 结构审查）
+> · 2026-08-26 收尾轮完成（私有远端 · 同步探针 · 记录清理 · hook 三项核验）
+> · 2026-09-03 卸载工具链完成（`tools/`：体检 · 卸载 · 还原 · 只读可视化界面）
+>
 > 完整执行记录见 `archive/PLAN-AND-EXECUTION-LOG.md`。
 > 下一轮 Plan 见 `archive/HADE_Plan_r2_2026-08-24.md`。
 
@@ -23,15 +26,16 @@ HADE 的可安装体 —— 一个 git 仓库同时是 marketplace、备份保�
 | **整体完成度、每批的门与结论** | `archive/PLAN-AND-EXECUTION-LOG.md` → 搜「📊 整体完成度」 |
 | **每一批的实测数字** | `plugins/hade-skills/evals/results/*.json`（22 个文件，含删原文前后对照） |
 | **本体现状** | `~/.claude/CLAUDE.md`（894 行）；仓库内副本 `plugins/hade-core/install/CLAUDE.md` |
-| **本体改了什么** | `git log`（重构前基线 **1090 行 / 91052 字节**，快照见 git 历史） |
+| **本体改了什么** | `git log`（重构前基线 **1090 行 / 91052 字节**）。批0 的 9 份快照已随脱敏移出工作区，仍可取回：`git show b4629a8:archive/snapshots-2026-08-24/<文件>` |
 | **决策史** | `archive/decision-log.md`（10 条，2026-08-24 从 Global §八 外移至此） |
 | **能力层装了什么** | `plugins/hade-skills/skills/`（5 个 skill + 2 个可执行校验器） |
+| **卸载能不能信** | `tools/README.md` → 「卸载后还剩什么，为什么」。对照组实测：装过再卸 vs 从未装过，逐字节比对四轮，**多删项为零** |
 
 一句话验收：`git log --oneline` 看做了什么，`archive/PLAN-AND-EXECUTION-LOG.md` 看为什么。
 
 **远端**：`https://github.com/<用户>/hade-vault`（**private**）。
 异地 clone 已验证：commits/HEAD/文件数一致。
-（`.gitattributes` 的 `* -text` 保证 CRLF 不被改写。）
+（`.gitattributes` 的 `* -text` 禁止行尾转换 —— 归档哈希、批处理文件、跨平台 diff 都靠它，理由见该文件注释。）
 
 **数字口径**（此前混用致飘忽，现钉死）：行数按换行符分段计，末尾换行算一段，
 故 `wc -l` 会少 1；字节按磁盘实际存储计，本机为 CRLF。
@@ -97,3 +101,17 @@ GLOBAL_PATCH.md · INSTALL.md         批0/批1 的原始安装文档（已执�
 版本更新：bump `plugin.json` 的 `version` → 卸载重装。
 注意 Windows 下改 plugin 名后需清 `~/.claude/plugins/cache/hade-vault`
 （文件系统大小写不敏感，旧目录名会被沿用）。
+
+装完本体还要拷记忆层，**两个文件都要拷**——`@hade/cases.md` 导入缺失时是静默失败。
+完整步骤见 [`MIGRATE.md`](MIGRATE.md)，让 AI 代劳见 [`AGENT-SETUP.md`](AGENT-SETUP.md)。
+
+## 卸载
+
+```bash
+node tools/hade-uninstall.js doctor        # 只读体检：装了什么、影响面多大
+node tools/hade-uninstall.js uninstall     # dry-run，出计划 + 发令牌
+```
+
+不想敲命令就双击 `tools/HADE-卸载器.cmd`，浏览器里把删什么/留什么并排看清。
+真执行需要 `--apply --confirm 确认销毁 --token <8位>`，且终端会当面再问一次。
+全程有备份，`restore` 可一键装回。细节见 [`tools/README.md`](tools/README.md)。
