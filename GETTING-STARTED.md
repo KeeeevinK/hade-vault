@@ -13,7 +13,7 @@
 
 ```
 ┌── 层1 · 人格层（常驻，加载即实例化）──────────────────┐
-│  ~/.claude/CLAUDE.md   892 行                          │
+│  ~/.claude/CLAUDE.md   894 行                          │
 │  元规则 · 对话习惯 · 铁规则 · 身份 · 错误模式           │
 │  仓库副本：plugins/hade-core/install/CLAUDE.md          │
 └──────────────────────│────────────────────────────────┘
@@ -87,6 +87,12 @@ cp <仓库>/plugins/hade-core/install/hade/cases.template.md ~/.claude/hade/case
 你会得到一份带着 17 处「反例：见记忆层 M-xx」却查不到内容的规则文件。
 
 **随时擦除**：清空 `~/.claude/hade/cases.md` 即可，骨架规则完全不受影响。
+
+**随时全卸**：不想敲命令就双击 `tools/HADE-卸载器.cmd`，浏览器里看清删什么、留什么。
+或 `node tools/hade-uninstall.js doctor` 先看装了什么、影响面多大，
+再 `uninstall` 出计划。它只删 HADE 自己的 13 处，`settings.json` 里你原有的偏好、
+你装的其它 plugin、`~/.claude/skills/` 都不会被碰，且有备份可一键 `restore`。
+详见 [`tools/README.md`](tools/README.md)。
 
 **这一步会用别人的人格层替换你的。** 里面写着 Kevin 的工作习惯、
 他的项目、他的原话、他和 Claude 约定的协作方式。
@@ -200,7 +206,7 @@ select() 在 Windows 崩 / 子进程未登录 / 测试比对的名字不匹配 /
 | 想了解 | 看哪里 |
 |---|---|
 | 完整重构历程与全部实测数据 | `archive/PLAN-AND-EXECUTION-LOG.md` |
-| 每一批的原始 eval 结果 | `plugins/hade-skills/evals/results/`（40 份） |
+| 每一批的原始 eval 结果 | `plugins/hade-skills/evals/results/`（22 份） |
 | 重要架构决策的来龙去脉 | `archive/decision-log.md` |
 | 下一轮计划（hook 容器赌注） | `archive/HADE_Plan_r2_2026-08-24.md` |
 | 人格层全文 | `plugins/hade-core/install/CLAUDE.md` |

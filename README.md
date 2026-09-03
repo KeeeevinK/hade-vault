@@ -6,6 +6,7 @@ HADE 的可安装体 —— 一个 git 仓库同时是 marketplace、备份保�
 > · 人读 → [`GETTING-STARTED.md`](GETTING-STARTED.md)（三种采用方式 · 坑 · 方法论）
 > · 让 AI 装 → [`AGENT-SETUP.md`](AGENT-SETUP.md)（可直接执行的安装指令）
 > · 自己换新电脑 → [`MIGRATE.md`](MIGRATE.md)（完整迁移：骨架 + 记忆层 + skill）
+> · 想卸载 / 先体检 → [`tools/README.md`](tools/README.md)（双击 `tools/HADE-卸载器.cmd` 开可视化界面）
 > · `INSTALL.md` / `GLOBAL_PATCH.md` 是过时的历史记录，**勿照做**
 
 > **状态：2026-08-24 形式重构完成（批0 → 批3 + §6.6 校验层 + 结构审查）；
@@ -20,8 +21,8 @@ HADE 的可安装体 —— 一个 git 仓库同时是 marketplace、备份保�
 | 想确认什么 | 看哪里 |
 |---|---|
 | **整体完成度、每批的门与结论** | `archive/PLAN-AND-EXECUTION-LOG.md` → 搜「📊 整体完成度」 |
-| **每一批的实测数字** | `plugins/hade-skills/evals/results/*.json`（40 个文件，含删原文前后对照） |
-| **本体现状** | `~/.claude/CLAUDE.md`（892 行）；仓库内副本 `plugins/hade-core/install/CLAUDE.md` |
+| **每一批的实测数字** | `plugins/hade-skills/evals/results/*.json`（22 个文件，含删原文前后对照） |
+| **本体现状** | `~/.claude/CLAUDE.md`（894 行）；仓库内副本 `plugins/hade-core/install/CLAUDE.md` |
 | **本体改了什么** | `git log`（重构前基线 **1090 行 / 91052 字节**，快照见 git 历史） |
 | **决策史** | `archive/decision-log.md`（10 条，2026-08-24 从 Global §八 外移至此） |
 | **能力层装了什么** | `plugins/hade-skills/skills/`（5 个 skill + 2 个可执行校验器） |
@@ -43,14 +44,20 @@ HADE 的可安装体 —— 一个 git 仓库同时是 marketplace、备份保�
 .claude-plugin/marketplace.json      目录文件（列出两个 plugin）
 plugins/hade-core/                   人格层：SessionStart 唤醒指针 + 本体安装件
   hooks/session-start.js               → 吐指针，不吐全文
-  install/CLAUDE.md                    → 本体全文副本（892 行，随本体更新同步）
+  install/CLAUDE.md                    → 本体全文副本（894 行，随本体更新同步）
 plugins/hade-skills/                 能力层：按需 skill，可独立分发
   skills/naming-system/                希腊词根命名系统
   skills/visual-zoom-preview/          可缩放预览布局陷阱
   skills/single-source-arbitration/    唯一仲裁源数据流
   skills/design-color/                 §十 色彩系统 + check_colors.py
   skills/local-storage-safety/         数据安全校验器（纯工具容器，规则正文留本体）
-  evals/                               触发率评测：runner + 测试集 + 40 份实测结果
+  evals/                               触发率评测：runner + 测试集 + 22 份实测结果
+tools/                               卸载 / 还原 / 体检（零依赖 Node，不随 plugin 被删）
+  HADE-卸载器.cmd                      → 双击即开可视化界面（只读）
+  hade-uninstall.js                    → doctor · uninstall · restore
+  hade-ui.js                           → 本地只读 UI 服务
+  README.md                            → 命令速查 · 六道闸 · 会话协议
+  MANUAL-UNINSTALL.md                  → 脚本跑不了时的手工降级路径
 archive/
   PLAN-AND-EXECUTION-LOG.md          ★ 完整 Plan + 全部执行记录与实测证据
   decision-log.md                    决策史（10 条）

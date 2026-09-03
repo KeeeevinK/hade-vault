@@ -172,7 +172,40 @@ cp D:/HADE-vault/plugins/hade-core/install/hade/cases.template.md ~/.claude/hade
 > **卸载不碰仓库。** `HADE-vault/` 与 GitHub 私有远端保持不动，
 > 随时可以照前面的步骤重新装回来。
 
-## 完整卸载（四步）
+## 最省事：双击 `tools/HADE-卸载器.cmd`
+
+浏览器会开一个界面，把删什么 / 留什么并排摆给你看，再给一条可复制的命令。
+界面只读，不会删任何东西。详见 [`tools/README.md`](tools/README.md)。
+
+## 或者用命令行
+
+```bash
+node tools/hade-uninstall.js doctor        # 先看装了什么、影响面多大
+node tools/hade-uninstall.js uninstall     # dry-run：打印清单 + 发令牌
+```
+
+确认清单没问题后，照 dry-run 打印的那行命令执行（带 `--confirm 确认销毁` 和令牌）。
+
+工具比手工四步多做三件事：
+
+- **管全 13 处**，包括手工版长期漏掉的 `plugins/data/*hade*` 两个残留目录，
+  和会变成悬空指针的 `projects/*/memory/` 记忆桥接指针；
+  检测到 `CLAUDE.md.backup*` 还会把你装 HADE 之前的原规则改回去
+- **JSON 只删键不删文件** —— `settings.json` 里你的 `effortLevel` / `tui` 等个人偏好、
+  `known_marketplaces.json` 里的 `claude-plugins-official` 都会原样保留
+- **有备份和还原** —— 备份进 `HADE_Vault/uninstall-backups/`，
+  `restore` 能一键装回来，且 JSON 走键级合并不会吃掉你后来改的键
+
+细节见 [`tools/README.md`](tools/README.md)。工具跑不了（Node 缺失等）时看
+[`tools/MANUAL-UNINSTALL.md`](tools/MANUAL-UNINSTALL.md)，或用下面的附录。
+
+---
+
+## 附录 · 手工四步（工具跑不了时）
+
+> ⚠ 手工做没有幂等保证、没有备份校验、没有硬名单拦截。
+> 尤其注意：**`claude plugin uninstall` 处理不了 `plugins/data/` 下的残留目录**，
+> 必须自己补第 ⑤ 步。
 
 ```bash
 # ① 卸 plugin（唤醒 hook + 5 个 skill 一起走）
@@ -188,10 +221,21 @@ rm -rf ~/.claude/plugins/cache/hade-vault
 # ④ 移走人格层与记忆层 —— 建议改名而不是删除，留条后路
 mv ~/.claude/CLAUDE.md ~/.claude/CLAUDE.md.hade-backup
 mv ~/.claude/hade ~/.claude/hade.backup
+
+# ⑤ 清 plugin 数据残留（CLI 不管这一层，长期被漏掉的就是它）
+ls ~/.claude/plugins/data/            # 找所有名字里含 hade 的目录，大小写不敏感
+rm -rf ~/.claude/plugins/data/hade-core-hade-vault
+rm -rf ~/.claude/plugins/data/HADE-core-inline
 ```
 
 第 ④ 步用 `mv` 不用 `rm`：万一想装回来，改回名字就行，不必再从仓库拷。
 确定不要了再删那两个 backup。
+
+第 ⑤ 步的 `HADE-core-inline` 是早期命名遗留。Windows 文件系统大小写不敏感，
+靠肉眼很容易只看到其中一个 —— 用 `ls` 列一遍再删。
+
+**绝对不要碰**：`~/.claude/skills/`（与 HADE 无关的 skill，可能上百个）、
+`~/.claude/backups/`（Claude Code 自己的备份）、`~/.claude.json`（里面记的是你的使用痕迹）。
 
 ## 验证已恢复
 
