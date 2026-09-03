@@ -2,6 +2,26 @@
 
 HADE 的可安装体 —— 一个 git 仓库同时是 marketplace、备份保险箱、版本化历史。
 
+**HADE 是什么**：一套让 Claude Code 跨 session 保持同一套工作方式的配置。
+不是应用、不是 Agent 框架，就是"每次开对话都自动带上的一份规则 + 一批按需触发的领域知识"。
+它由 Kevin 与 Claude 在数月协作中长出来，规则里的每一条都对应一次真实的翻车或约定。
+
+装完之后分三层，各自的生效机制完全不同：
+
+```
+人格层   ~/.claude/CLAUDE.md 894 行 + hade/cases.md 17 条翻车记录
+         无条件加载，100% 生效 —— 每次开 session 必到
+
+唤醒层   SessionStart hook，75 行
+         确定触发，吐一句「本体在哪、去读它」的指针
+
+能力层   5 个 skill + 2 个可执行校验器
+         靠 description 概率匹配，实测 0/9 到 4/4 不等 —— 这层不保证生效
+```
+
+**最重要的一条设计**：把不能失效的东西放在无条件加载那一侧。
+为什么不能反过来，见下面「核心约束」。
+
 > **第一次拿到这份仓库？**
 > · 人读 → [`GETTING-STARTED.md`](GETTING-STARTED.md)（三种采用方式 · 坑 · 方法论）
 > · 让 AI 装 → [`AGENT-SETUP.md`](AGENT-SETUP.md)（可直接执行的安装指令）
@@ -150,6 +170,11 @@ node tools/hade-uninstall.js doctor        # 装好后应报 13 项、退出码 
 
 或开个新 session 看开头有没有 `[HADE 唤醒指针]`。
 
+**装完先读一遍已知局限** —— [`GETTING-STARTED.md`](GETTING-STARTED.md) 第七节。
+关键一条：5 个 skill 里 `local-storage-safety` 实测触发率 **0/9**，
+`single-source-arbitration` 同批 query 重测从 4/4 掉到 1/4。
+能力层本来就不保证生效，别按"装了就会自动用上"预期。
+
 完整步骤与排障见 [`MIGRATE.md`](MIGRATE.md)，让 AI 代劳见 [`AGENT-SETUP.md`](AGENT-SETUP.md)。
 
 ### 维护
@@ -157,6 +182,11 @@ node tools/hade-uninstall.js doctor        # 装好后应报 13 项、退出码 
 版本更新：bump `plugin.json` 的 `version` → 卸载重装。
 Windows 下改过 plugin 名要清 `~/.claude/plugins/cache/hade-vault`
 （文件系统大小写不敏感，旧目录名会被沿用）。
+
+改完文档后跑一次 `node tools/check-docs.js` —— 它把 7 个数字断言与仓库现场比对，
+过期就报文件与行号。同一个数字散在四五份分发文档里是有意的，这个脚本让冗余可校验。
+
+---
 
 ## 卸载
 
@@ -167,6 +197,11 @@ node tools/hade-uninstall.js uninstall     # dry-run，出计划 + 发令牌
 
 不想敲命令就双击 `tools/HADE-卸载器.cmd`，浏览器里把删什么/留什么并排看清。
 真执行需要 `--apply --confirm 确认销毁 --token <8位>`，且终端会当面再问一次。
+
+卸载覆盖 HADE 装进 `~/.claude/` 的全部 13 处，**不碰**你的 skill、别人的 plugin、
+Claude Code 自己的文件。`~/.hade`（实例化数据仓，若存在）默认保留，
+要一并移走得显式加 `--with-vault`。
+
 全程有备份，`restore` 可一键装回。细节见 [`tools/README.md`](tools/README.md)。
 
 ---
