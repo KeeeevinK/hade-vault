@@ -97,18 +97,66 @@ GLOBAL_PATCH.md · INSTALL.md         批0/批1 的原始安装文档（已执�
 需要：Claude Code（支持 plugin / marketplace）· Node（唤醒 hook 要跑它）·
 Python 3.8+（两个校验器要跑，缺了不影响 skill 本身）。
 
+**要装的是两样独立的东西**，这是最容易踩空的地方：
+
 ```
-/plugin marketplace add <本仓库路径>
-/plugin install hade-skills@hade-vault      # 能力层，可给任何人装
-/plugin install hade-core@hade-vault        # 人格层，只给自己装
+plugin（能力层 + 唤醒层）   走 /plugin 命令 → ~/.claude/plugins/cache/
+本体（人格层）              两个文件，得自己拷 → ~/.claude/
 ```
+
+`/plugin install` **不会**帮你放本体。只装 plugin 不拷本体，
+唤醒 hook 每个 session 都会指向一个不存在的文件。
+
+### 方式 A · 只装能力层
+
+零风险，不动你现有任何配置。
+
+```
+/plugin marketplace add <仓库路径>          ← 指向含 .claude-plugin/ 的那一层
+/plugin install hade-skills@hade-vault
+```
+
+得到 5 个 skill，按需触发。到此为止即可。
+
+### 方式 B · 完整安装
+
+**会覆盖你的 `~/.claude/CLAUDE.md`。** 先备份，再装唤醒层，最后拷本体与记忆层。
+
+```bash
+cp ~/.claude/CLAUDE.md ~/.claude/CLAUDE.md.backup      # 已有就先备份
+```
+
+```
+/plugin install hade-core@hade-vault
+```
+
+```bash
+mkdir -p ~/.claude/hade
+cp <仓库>/plugins/hade-core/install/CLAUDE.md      ~/.claude/CLAUDE.md
+cp <仓库>/plugins/hade-core/install/hade/cases.md  ~/.claude/hade/cases.md
+```
+
+⚠️ **两个文件都要拷。** `@hade/cases.md` 导入缺失时**静默失败** —— 不报错、
+不警告，只是本体里 17 处「见记忆层 M-xx」永远查不到内容。
+
+想从零积累自己的记忆，把最后一行换成 `cases.template.md`（空模板）；
+骨架规则完整可用，只是少了那层具体经历。
+
+### 验证
+
+```bash
+node tools/hade-uninstall.js doctor        # 装好后应报 13 项、退出码 1
+```
+
+或开个新 session 看开头有没有 `[HADE 唤醒指针]`。
+
+完整步骤与排障见 [`MIGRATE.md`](MIGRATE.md)，让 AI 代劳见 [`AGENT-SETUP.md`](AGENT-SETUP.md)。
+
+### 维护
 
 版本更新：bump `plugin.json` 的 `version` → 卸载重装。
-注意 Windows 下改 plugin 名后需清 `~/.claude/plugins/cache/hade-vault`
+Windows 下改过 plugin 名要清 `~/.claude/plugins/cache/hade-vault`
 （文件系统大小写不敏感，旧目录名会被沿用）。
-
-装完本体还要拷记忆层，**两个文件都要拷**——`@hade/cases.md` 导入缺失时是静默失败。
-完整步骤见 [`MIGRATE.md`](MIGRATE.md)，让 AI 代劳见 [`AGENT-SETUP.md`](AGENT-SETUP.md)。
 
 ## 卸载
 
