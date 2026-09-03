@@ -60,6 +60,7 @@ tools/                               卸载 / 还原 / 体检（零依赖 Node�
   HADE-卸载器.cmd                      → 双击即开可视化界面（只读）
   hade-uninstall.js                    → doctor · uninstall · restore
   hade-ui.js                           → 本地只读 UI 服务
+  check-docs.js                        → 查文档里的数字断言有没有过期
   README.md                            → 命令速查 · 六道闸 · 会话协议
   MANUAL-UNINSTALL.md                  → 脚本跑不了时的手工降级路径
 archive/
