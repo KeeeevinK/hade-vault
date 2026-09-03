@@ -7,6 +7,7 @@ HADE 的可安装体 —— 一个 git 仓库同时是 marketplace、备份保�
 > · 让 AI 装 → [`AGENT-SETUP.md`](AGENT-SETUP.md)（可直接执行的安装指令）
 > · 自己换新电脑 → [`MIGRATE.md`](MIGRATE.md)（完整迁移：骨架 + 记忆层 + skill）
 > · 想卸载 / 先体检 → [`tools/README.md`](tools/README.md)（双击 `tools/HADE-卸载器.cmd` 开可视化界面）
+> · 拿到这份 zip 的人 → 先看本文末尾「使用与分发」（含真实个人记录，勿公开转发）
 > · `INSTALL.md` / `GLOBAL_PATCH.md` 是过时的历史记录，**勿照做**
 
 > **状态**
@@ -93,6 +94,9 @@ GLOBAL_PATCH.md · INSTALL.md         批0/批1 的原始安装文档（已执�
 
 ## 安装
 
+需要：Claude Code（支持 plugin / marketplace）· Node（唤醒 hook 要跑它）·
+Python 3.8+（两个校验器要跑，缺了不影响 skill 本身）。
+
 ```
 /plugin marketplace add <本仓库路径>
 /plugin install hade-skills@hade-vault      # 能力层，可给任何人装
@@ -116,3 +120,17 @@ node tools/hade-uninstall.js uninstall     # dry-run，出计划 + 发令牌
 不想敲命令就双击 `tools/HADE-卸载器.cmd`，浏览器里把删什么/留什么并排看清。
 真执行需要 `--apply --confirm 确认销毁 --token <8位>`，且终端会当面再问一次。
 全程有备份，`restore` 可一键装回。细节见 [`tools/README.md`](tools/README.md)。
+
+---
+
+## 使用与分发
+
+这是一套私人协作系统的快照，不是通用软件。里面有真实记录：`hade/cases.md`
+的 17 条翻车记录带日期、项目名和原话，多份文档直接引用协作者本人的话，
+git 历史的早期提交者字段留有一个真实邮箱（后续提交已改用 noreply 地址，
+但历史按既定裁决保持完整，未改写）。
+
+**可以**自用、修改、按 [`GETTING-STARTED.md`](GETTING-STARTED.md) 挑对你成立的部分。
+**不要**转为公开仓库、推到公开托管、或原样转发给第三方。
+
+未附开源协议 —— 标准协议都不贴合这类内容，默认保留一切权利。
