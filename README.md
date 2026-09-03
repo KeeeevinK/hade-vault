@@ -22,6 +22,55 @@ HADE 的可安装体 —— 一个 git 仓库同时是 marketplace、备份保�
 **最重要的一条设计**：把不能失效的东西放在无条件加载那一侧。
 为什么不能反过来，见下面「核心约束」。
 
+---
+
+## 它能干什么
+
+### 人格层：每次对话自动带上的工作方式
+
+不是"更聪明"，是**行为可预期**。894 行规则里典型的几条：
+
+- 代价不可逆的操作（删除、覆盖、迁移、发布）先发预警，等你明确确认才动手
+- 指代有多个可能对象时列候选让你选，不猜
+- 连续两次修不好就停下来问具体问题，不进入"再试一个数字"的循环
+- 完成后给可复核的证据，不说"应该没问题"
+
+配套的 17 条记忆层是**真实翻车记录**（带日期、项目名、原话）。规则说"要问不要猜"，
+记忆层说"上次你猜了 5 轮全错，直到让用户开 F12 才发现是 Word VML 标签"。
+实测：加了具体反例的 skill，手算准确率从 0/3 提到 3/3。
+
+### 能力层：5 个领域 skill + 2 个可执行校验器
+
+| skill | 覆盖什么 | 实测触发率 |
+|---|---|---|
+| `naming-system` | 希腊词根命名系统，给项目/工具取代号 | 4/4 |
+| `visual-zoom-preview` | 可缩放预览的布局陷阱（呼吸比例、单双页对称、焦点锚点） | 4/4 |
+| `design-color` | 色彩系统：双通道模型、饱和度禁区、面积约束、并置间距 | 4/4 |
+| `single-source-arbitration` | 多路径分配场景的唯一仲裁源数据流架构 | 4/4 → 1/4 ⚠ |
+| `local-storage-safety` | Electron/Tauri 数据安全三件套（纯工具容器，规则正文留在本体） | 0/9 ⚠ |
+
+**两个校验器跨项目通用，价值最高** —— 不依赖任何触发机制，随时手动跑：
+
+```bash
+python .../design-color/scripts/check_colors.py "#ff3b30" "#34c759"
+python .../local-storage-safety/scripts/check_electron_safety.py <项目根>
+```
+
+后者在一个真实项目上抓到过：单实例锁缺失 + userData 未锁定 + `deleteAppDataOnUninstall: true`
+三件套全缺，且 userData 目录已经漂移。退出码 0 通过 / 1 有问题，非 Electron 项目自动跳过。
+
+### 比 skill 更值钱的：方法论
+
+重构过程中**实测出来**的几条结论，跨项目通用，全在
+[`GETTING-STARTED.md`](GETTING-STARTED.md) 第五节：三种「这条规则不能做成 skill」的否决理由、
+「迁走即删原文」的前置条件、量具必须先校准（出现过 5 次假阴性）、
+反例是唤醒力的来源、能力充分时工具会被跳过。
+
+### 它不干什么
+
+不是 Agent 框架、不接管你的工作流、不联网、不收集任何数据。
+装上之后 Claude Code 还是 Claude Code，只是每次开口前先读过同一份规则。
+
 > **第一次拿到这份仓库？**
 > · 人读 → [`GETTING-STARTED.md`](GETTING-STARTED.md)（三种采用方式 · 坑 · 方法论）
 > · 让 AI 装 → [`AGENT-SETUP.md`](AGENT-SETUP.md)（可直接执行的安装指令）
@@ -127,28 +176,57 @@ plugin（能力层 + 唤醒层）   走 /plugin 命令 → ~/.claude/plugins/cac
 `/plugin install` **不会**帮你放本体。只装 plugin 不拷本体，
 唤醒 hook 每个 session 都会指向一个不存在的文件。
 
-### 方式 A · 只装能力层
+### 第 0 步 · 先把仓库弄到本机
 
-零风险，不动你现有任何配置。
+```bash
+git clone https://github.com/<用户>/hade-vault.git      # 私有仓库，需先 gh auth login
+```
+
+或把 `HADE-vault-share-*.zip` 解压出来（无 remote，两台机器将来要手动合并）。
+**记下绝对路径**，下面记作 `<仓库>`。
+
+### 第 1 步 · 选一种采用方式
+
+按侵入性从低到高，三选一：
+
+| | 装什么 | 对你现有配置的影响 |
+|---|---|---|
+| **A** | 只装 `hade-skills` | **零影响**。5 个 skill 按需触发，不碰任何现有文件 |
+| **B** | A + `hade-core` | 装唤醒 hook，**用你自己的规则**。需要你自备 `~/.claude/CLAUDE.md` |
+| **C** | B + 采用本仓库的本体 | **会覆盖你的 `~/.claude/CLAUDE.md`** |
+
+不确定就先 A。它随时可以升到 B 或 C，反过来也随时能退。
+
+#### 方式 A · 只装能力层
 
 ```
-/plugin marketplace add <仓库路径>          ← 指向含 .claude-plugin/ 的那一层
+/plugin marketplace add <仓库>              ← 指向含 .claude-plugin/ 的那一层
 /plugin install hade-skills@hade-vault
 ```
 
-得到 5 个 skill，按需触发。到此为止即可。
+到此为止即可。得到 5 个 skill，不装 `hade-core` 就没有指针指向问题。
 
-### 方式 B · 完整安装
+#### 方式 B · 加装唤醒层，内容用你自己的
 
-**会覆盖你的 `~/.claude/CLAUDE.md`。** 先备份，再装唤醒层，最后拷本体与记忆层。
+```
+/plugin install hade-core@hade-vault
+```
+
+hook 会在每个新 session 开头说「本体在 `~/.claude/CLAUDE.md`，立刻读它」。
+**那个路径在你机器上是你自己的规则文件** —— 这正是方式 B 的用途：
+你拿到的是「确定性唤醒机制」，规则内容是你的。
+
+若那个文件不存在，指针会指向空气。要么写一份自己的，要么走 C，要么退回 A。
+
+#### 方式 C · 采用本仓库的本体
+
+**这一步会用别人的人格层替换你的。** 先备份：
 
 ```bash
 cp ~/.claude/CLAUDE.md ~/.claude/CLAUDE.md.backup      # 已有就先备份
 ```
 
-```
-/plugin install hade-core@hade-vault
-```
+再拷本体与记忆层（**两个文件都要拷**）：
 
 ```bash
 mkdir -p ~/.claude/hade
@@ -156,11 +234,34 @@ cp <仓库>/plugins/hade-core/install/CLAUDE.md      ~/.claude/CLAUDE.md
 cp <仓库>/plugins/hade-core/install/hade/cases.md  ~/.claude/hade/cases.md
 ```
 
-⚠️ **两个文件都要拷。** `@hade/cases.md` 导入缺失时**静默失败** —— 不报错、
-不警告，只是本体里 17 处「见记忆层 M-xx」永远查不到内容。
+⚠️ `@hade/cases.md` 导入缺失时**静默失败** —— 不报错、不警告，
+只是本体里 17 处「见记忆层 M-xx」永远查不到内容。
 
-想从零积累自己的记忆，把最后一行换成 `cases.template.md`（空模板）；
-骨架规则完整可用，只是少了那层具体经历。
+### 第 2 步 · 记忆层二选一（仅方式 C）
+
+| | 命令末行换成 | 得到什么 |
+|---|---|---|
+| **带记忆** | `hade/cases.md`（上面就是） | 17 条真实翻车记录，含日期、项目名、原话 |
+| **空模板** | `hade/cases.template.md` | 从零积累自己的；骨架规则完整可用，只是少了那层具体经历 |
+
+**随时可擦**：清空 `~/.claude/hade/cases.md` 即可，骨架不受影响。
+
+### 平台差异
+
+`cp` / `mkdir -p` 是 bash 语法。Windows 下用 Git Bash 或 WSL 直接可用；
+PowerShell 里换成 `Copy-Item` / `New-Item -ItemType Directory`。
+双击式卸载器 `tools/HADE-卸载器.cmd` 仅 Windows；其它平台走 `node tools/hade-uninstall.js`。
+
+### 让 AI 代装
+
+不想自己敲，把这句给一个新 session：
+
+```
+读 <仓库>/AGENT-SETUP.md，按它帮我安装 HADE。我要方式 C，带记忆层。
+```
+
+`AGENT-SETUP.md` 是 229 行可执行指令，含环境检查、每步验证、四个已知坑的排障。
+后半句省一轮 —— 那份文件强制它先问你选 A/B/C。
 
 ### 验证
 
