@@ -129,7 +129,7 @@ python .../local-storage-safety/scripts/check_electron_safety.py <项目根>
 ## 五、这套系统真正值钱的部分：方法论
 
 比那 5 个 skill 更有用的，是重构过程中**实测出来**的几条结论。
-全部有数据支撑，都在 `archive/PLAN-AND-EXECUTION-LOG.md`（1499 行）。
+全部有数据支撑，都在 `archive/PLAN-AND-EXECUTION-LOG.md`（1500 行）。
 
 ### 三种「这条规则不能做成 skill」的否决理由
 

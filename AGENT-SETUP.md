@@ -27,7 +27,7 @@ Python 缺失不影响 skill 本身，只影响两个校验脚本。
 
 ## 第 0 步 · 先问用户，不要自己决定
 
-这份仓库带着**原作者的完整人格层**（`plugins/hade-core/install/CLAUDE.md`，892 行），
+这份仓库带着**原作者的完整人格层**（`plugins/hade-core/install/CLAUDE.md`，894 行），
 里面是他的工作习惯、项目历史、原话。
 
 **在做任何事之前，把下面三种方式给用户看，让他选一个：**
@@ -219,7 +219,7 @@ plugin 缓存按 `version` 目录存。改内容后必须 bump
 | 想了解 | 文件 |
 |---|---|
 | 这套系统是什么、三种采用方式、方法论 | `GETTING-STARTED.md` |
-| 完整重构历程与全部实测数据（1499 行） | `archive/PLAN-AND-EXECUTION-LOG.md` |
+| 完整重构历程与全部实测数据（1500 行） | `archive/PLAN-AND-EXECUTION-LOG.md` |
 | 重要架构决策的来龙去脉 | `archive/decision-log.md` |
 | 人格层全文 | `plugins/hade-core/install/CLAUDE.md` |
 
