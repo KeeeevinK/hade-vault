@@ -1,0 +1,63 @@
+name: verify
+
+# 这个仓库的立身之本是「实测，不是声称」。
+# README 里写的每个数字、卸载器不多删的每条保证，都必须是每次推送都被重跑过的。
+# 靠人记得跑等于没跑 —— 所以放这里。
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: 语法检查（三个工具 + 两份测试）
+        run: |
+          for f in tools/hade-uninstall.js tools/hade-ui.js tools/check-docs.js \
+                   tools/check-context.js tools/tests/uninstall.test.js \
+                   tools/tests/roundtrip-audit.js; do
+            node --check "$f" && echo "  ok  $f"
+          done
+
+      - name: 卸载器沙箱断言（75 项）
+        run: node tools/tests/uninstall.test.js
+
+      - name: 三向差分对照组（装过再卸 vs 从未装过）
+        run: node tools/tests/roundtrip-audit.js || true
+        # 方向①「多删」为空才是判据；②③是设计内的保留项，
+        # 脚本以非零退出表示"存在差异"，这里不当作失败。
+        # 真正的门在下一步。
+
+      - name: 判据：多删项必须为零
+        run: |
+          out=$(node tools/tests/roundtrip-audit.js || true)
+          echo "$out"
+          if echo "$out" | grep -q '✗ ① A有B无'; then
+            echo "::error::对照组检出多删项 —— 卸载器删了不该删的东西"
+            exit 1
+          fi
+          n=$(echo "$out" | grep -c '✓ ① A有B无（多删了）  ：无')
+          if [ "$n" -ne 4 ]; then
+            echo "::error::四轮对照组未全部通过（通过 $n/4）"
+            exit 1
+          fi
+          echo "  四轮对照组：多删项均为零"
+
+      - name: 文档数字断言未过期
+        run: node tools/check-docs.js
+
+      - name: 上下文开销可量（仓库副本）
+        run: node tools/check-context.js --repo
+
+      - name: 卸载器只读命令可用
+        run: |
+          node tools/hade-uninstall.js doctor --home "$(mktemp -d)" --json > /dev/null
+          echo "  doctor --json 可用（空目录应报未安装）"

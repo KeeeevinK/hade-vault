@@ -25,6 +25,18 @@ tools/HADE-卸载器.cmd
 
 ---
 
+## 证据在哪：自己跑一遍
+
+```bash
+node tools/tests/uninstall.test.js      # 75 项断言，全程用假 .claude，绝不碰真本体
+node tools/tests/roundtrip-audit.js     # 三向差分对照组，四轮
+```
+
+两份测试都只在临时目录里造沙箱（`--home` / `--backup-root` 双参数指向沙箱），
+跑完自动清理。CI 每次推送重跑，「多删项为零」是硬门槛。
+
+---
+
 ## 顺带：上下文开销体检
 
 ```bash

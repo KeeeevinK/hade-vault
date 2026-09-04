@@ -20,6 +20,18 @@
 支撑材料：22 份原始 eval 结果（[可自己复跑](#这些数字可以自己复跑)）、
 1500 行执行记录、10 条决策史，以及每个 commit 都可回滚的完整 git 历史。
 
+**所有断言都在 CI 里跑**，不靠作者担保：
+
+```bash
+node tools/tests/uninstall.test.js      # 卸载器 75 项沙箱断言
+node tools/tests/roundtrip-audit.js     # 对照组：装过再卸 vs 从未装过，逐字节比对
+node tools/check-docs.js                # 文档里的数字有没有过期
+node tools/check-context.js             # 常驻上下文开销是多少
+```
+
+每次推送自动重跑（[`.github/workflows/verify.yml`](.github/workflows/verify.yml)），
+其中「卸载器多删项必须为零」是硬门槛，不满足直接失败。
+
 > **第一次拿到这份仓库，按你的情况挑一条：**
 > · 想先搞清这是什么 → 往下读，五分钟看完「这是什么」和「它能干什么」
 > · 想装 → [跳到安装](#安装)（三种方式，最轻的一种零影响）
