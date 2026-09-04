@@ -1,5 +1,7 @@
 # HADE-vault
 
+[![verify](https://github.com/KeeeevinK/hade-vault/actions/workflows/verify.yml/badge.svg)](https://github.com/KeeeevinK/hade-vault/actions/workflows/verify.yml)
+
 一套让 Claude Code 跨会话保持同一套工作方式的配置，外加把它做出来时**实测**到的几条结论。
 
 **如果你只看一件事，看这个**：Claude Code 的 skill 靠 `description` 语义匹配触发，
