@@ -4,6 +4,33 @@
 
 一套让 Claude Code 跨会话保持同一套工作方式的配置，外加把它做出来时**实测**到的几条结论。
 
+<details>
+<summary><b>English summary</b> — the finding, in short</summary>
+
+Claude Code skills fire by semantic matching against a `description` string, and that
+layer is **unreliable**: measured trigger rates across a fixed query set ranged from
+**0/9 to 4/4**, and one skill fell from **4/4 to 1/4** on a retest where neither the
+description nor the queries had changed by a single character.
+
+So this system splits rules across two sides:
+
+- **Must never be missed** → `~/.claude/CLAUDE.md`, loaded unconditionally, present 100% of the time
+- **May be absent** → skills, loaded on demand, accepted as sometimes not arriving
+
+**If you write Claude Code plugins, do not put must-not-miss rules behind a skill
+description.** Three empirically derived veto rules for deciding whether a rule can be
+externalised are in [核心约束](#核心约束). One concrete data point: the same rule scored
+**0/9 via description matching** and **3/3 when bound to an objective hook event**.
+
+Everything is reproducible — 22 raw eval results, a 75-assertion sandbox suite for the
+uninstaller, and a control-group audit (installed-then-removed vs never-installed,
+compared byte for byte) all rerun in CI on every push.
+
+The prose below is Chinese; the code, tests and CI are language-neutral.
+*Note: this repository contains real personal records — see [使用与分发](#使用与分发) before sharing it.*
+
+</details>
+
 **如果你只看一件事，看这个**：Claude Code 的 skill 靠 `description` 语义匹配触发，
 而这层匹配**不可靠** —— 同一批测试 query，实测触发率从 **0/9 到 4/4** 不等，
 其中一条 skill 隔几小时重测，`description` 与 query **一字未改**，
@@ -400,7 +427,32 @@ node tools/hade-uninstall.js uninstall     # dry-run，出计划并打印一条�
 令牌 30 分钟有效，且只对你刚看到的那份清单有效（中途环境变了会拒绝执行）。
 终端还会当面再问一次，手敲「确认销毁」才真动手。
 
-不想敲命令就双击 `tools/HADE-卸载器.cmd`（仅 Windows），浏览器里把删什么/留什么并排看清。
+**不想敲命令**就双击 `tools/HADE-卸载器.cmd`（仅 Windows），浏览器里长这样：
+
+```
+┌──────────────────────────────────────────────────────────────┐
+│  HADE 卸载器                                    ● 已安装 · 正常│
+├───────────────────────────────┬──────────────────────────────┤
+│  会被移除 · 13 项              │  会被保留                     │
+│                               │                              │
+│  ● 人格层骨架   894 行         │  ✓ settings.json 保留：       │
+│  ● 记忆层       17 条          │    effortLevel · tui · …     │
+│  ● plugin 缓存  64 文件        │  ✓ known_marketplaces 保留：  │
+│  ● plugin 数据  ×2 空目录      │    claude-plugins-official   │
+│  ● 记忆桥接指针 910 字节        │  ✓ 硬名单（代码级禁止触碰）：  │
+│    ↳ 不删它会剩一个指向已消失   │    ~/.claude/skills          │
+│      文件的路标，误导新会话     │    ~/.claude.json            │
+│  ● settings.json 的 3 个键     │  · 使用计数键 15 个 · 不碰    │
+│                               │                              │
+│  ☐ 实例化数据仓 ~/.hade  〔可选〕│                              │
+├───────────────────────────────┴──────────────────────────────┤
+│  ① 生成卸载命令 → ② 复制 → ③ 终端粘贴 → ④ 手敲「确认销毁」      │
+│         〔 生成卸载命令 〕   按钮本身不删任何东西              │
+└──────────────────────────────────────────────────────────────┘
+```
+
+左边琥珀色是要走的，右边青色是不动的 —— 不用懂 JSON 键是什么，看两栏就够。
+界面**只读**：三条子进程调用是硬编码字面量，`--apply` 在整个 UI 文件里只出现在注释里。
 
 卸载覆盖 HADE 装进 `~/.claude/` 的全部 13 处，**不碰**你的 skill、别人的 plugin、
 Claude Code 自己的文件。
@@ -461,6 +513,18 @@ GLOBAL_PATCH.md · INSTALL.md         批0/批1 的原始安装文档（已执�
 
 **R3 的前置条件**：迁走即删原文这条，只有在**实测触发率达标**时才成立。
 触发率 0 的 skill + 已删的原文 = 规则从体系消失，比留着当死条目更糟。
+
+### 为什么不直接用 X
+
+| 你可能会想 | 实测结果 |
+|---|---|
+| **只写一份 `CLAUDE.md` 不就行了？** | 那就是人格层，确实 100% 生效。但它无条件占上下文（[约 2 万 token](#代价每次会话约-2-万-token)），所有内容不分场合全带着。领域知识按需加载才划算 —— 这正是能力层存在的理由 |
+| **那全做成 skill？** | 自举悖论：决定「要不要加载人格」的那个主体，必须**先有人格**。而且 skill 触发是概率的 —— 实测 0/9 到 4/4 |
+| **skill 不触发，改改 `description` 不就好了？** | 试过，没用。同一条规则：走 description 概率匹配 **0/9**，换成 hook 绑「文件被改」这个客观事件 **3/3**。<br>一句话概括（执行日志原文）：**「description 把触发权交给模型的判断；hook 把它交给客观事件。」**<br>出处：`archive/PLAN-AND-EXECUTION-LOG.md:1464`「结论：R1 在 hook 层被解决」 |
+| **用 hook 全兜住？** | hook 确定触发，但只能绑在客观事件上（会话开始、文件写入）。"我冒出一个想先试试看的念头"没有对应事件。hook 解决的是"事件发生了要提醒"，不是"该想到某条规则" |
+
+**所以是分层，不是选型**：确定性事件走 hook，不能失效的规则常驻，
+领域知识按需加载并**接受它有时不来**。
 
 ---
 
